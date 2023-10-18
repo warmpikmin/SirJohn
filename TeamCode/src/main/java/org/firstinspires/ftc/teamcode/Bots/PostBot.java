@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Components.ArmRotation;
-import org.firstinspires.ftc.teamcode.Components.Camera;
+import org.firstinspires.ftc.teamcode.Components.OldCamera;
 import org.firstinspires.ftc.teamcode.Components.Grabber;
 import org.firstinspires.ftc.teamcode.Components.Mecanum;
 import org.firstinspires.ftc.teamcode.Components.Odometry;
@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Components.Slides;
 
 public class PostBot extends Robot {
     public boolean isTeleOp;
-    public Camera camera;
+    public OldCamera camera;
     public ArmRotation rotation;
     public Slides arm;
     public Grabber grabber;
@@ -27,7 +27,7 @@ public class PostBot extends Robot {
     @Override
     public void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
         this.isTeleOp = isTeleOp;
-        this.camera = new Camera(opMode, "Webcam 1", hardwareMap, telemetry);
+        this.camera = new OldCamera(opMode, "Webcam 1", hardwareMap, telemetry);
         this.rotation = new ArmRotation(
                 "rotation",
                 hardwareMap,
