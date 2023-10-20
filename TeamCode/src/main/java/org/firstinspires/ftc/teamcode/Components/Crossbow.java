@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 
-public class Launcher implements Component {
+public class Crossbow implements Component {
 
     private Servo launch;
     private boolean launched = false;
     Telemetry telemetry;
-    public Launcher(String deviceName, HardwareMap hardwareMap, Telemetry telemetry){
+    public Crossbow(String deviceName, HardwareMap hardwareMap, Telemetry telemetry){
         launch = hardwareMap.get(Servo.class, deviceName);
         this.telemetry = telemetry;
     }
