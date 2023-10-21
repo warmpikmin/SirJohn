@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Components.ArmRotation;
-import org.firstinspires.ftc.teamcode.Components.OldCamera;
 import org.firstinspires.ftc.teamcode.Components.Grabber;
 import org.firstinspires.ftc.teamcode.Components.Mecanum;
 import org.firstinspires.ftc.teamcode.Components.Odometry;
