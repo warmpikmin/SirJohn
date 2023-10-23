@@ -17,6 +17,7 @@ public class Hanger implements Component{
     public int UP;
     public int DOWN;
     public static int targetPosition = 0;
+
     public boolean isTeleOp;
 
     public double error;
@@ -57,8 +58,7 @@ public class Hanger implements Component{
     @Override
     public void update() {
         error = targetPosition - getCurrentPosition();
-
-        //unfinished obviously
+        //set power to something
 
     }
 
@@ -91,7 +91,7 @@ public class Hanger implements Component{
     }
 
     public void move(int position) {
-        //unfinished
+        targetPosition = position;
     }
 
     public void setPower(double motorPower) {
