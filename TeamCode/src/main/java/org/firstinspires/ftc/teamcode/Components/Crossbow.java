@@ -31,6 +31,7 @@ public class Crossbow implements Component {
 
     }
     //fluently instigating rapid ejection
+    //TODO figure out if this value works
     public void FIRE(){
         launch.setPosition(0.5);
         launched = true;
