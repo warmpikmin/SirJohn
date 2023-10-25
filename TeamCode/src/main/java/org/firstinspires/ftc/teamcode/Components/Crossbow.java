@@ -10,10 +10,14 @@ public class Crossbow implements Component {
 
     private Servo launch;
     private boolean launched = false;
+    public double firePos;
+    public double init;
     Telemetry telemetry;
-    public Crossbow(String deviceName, HardwareMap hardwareMap, Telemetry telemetry){
+    public Crossbow(String deviceName, HardwareMap hardwareMap, Telemetry telemetry, double firePos, double init){
         launch = hardwareMap.get(Servo.class, deviceName);
         this.telemetry = telemetry;
+        this.init=init;
+        this.firePos = firePos;
     }
 
     @Override
@@ -33,11 +37,11 @@ public class Crossbow implements Component {
     //fluently instigating rapid ejection
     //TODO figure out if this value works
     public void FIRE(){
-        launch.setPosition(0.5);
+        launch.setPosition(firePos);
         launched = true;
     }
     public void reset(){
-        launch.setPosition(0);
+        launch.setPosition(init);
         launched = false;
     }
 

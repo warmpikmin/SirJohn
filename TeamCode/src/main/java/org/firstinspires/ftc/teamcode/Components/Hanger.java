@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 @Config
 public class Hanger implements Component{
-    private final DcMotor rotation;
+    private final DcMotor hanger;
     public double PULSES_PER_REVOLUTION;
     public int INIT;
     public int UP;
@@ -23,7 +23,7 @@ public class Hanger implements Component{
     Telemetry telemetry;
 
     public Hanger(
-            String rotationName,
+            String hangerName,
             HardwareMap hardwareMap,
             Telemetry telemetry,
             boolean isTeleOp,
@@ -31,9 +31,9 @@ public class Hanger implements Component{
             double up,
             double down
     ){
-        rotation = hardwareMap.get(DcMotor.class, rotationName);
+        hanger = hardwareMap.get(DcMotor.class, hangerName);
 
-        rotation.setDirection(DcMotorSimple.Direction.FORWARD);
+        hanger.setDirection(DcMotorSimple.Direction.FORWARD);
 
         this.PULSES_PER_REVOLUTION = 2786.2;
         this.INIT = (int) (init * PULSES_PER_REVOLUTION);
@@ -45,8 +45,8 @@ public class Hanger implements Component{
 
     @Override
     public void init() {
-        rotation.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rotation.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        hanger.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hanger.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -64,9 +64,9 @@ public class Hanger implements Component{
 
     @Override
     public String getTelemetry() {
-        telemetry.addData("RotationPosition", getCurrentPosition());
-        telemetry.addData("RotationTarget", targetPosition);
-        telemetry.addData("RotationError", error);
+        telemetry.addData("HangerPosition", getCurrentPosition());
+        telemetry.addData("HangerTarget", targetPosition);
+        telemetry.addData("HangerError", error);
         return null;
     }
 
@@ -96,10 +96,10 @@ public class Hanger implements Component{
 
     public void setPower(double motorPower) {
         if (motorPower > 1) motorPower = 1;
-        rotation.setPower(motorPower);
+        hanger.setPower(motorPower);
     }
 
     public int getCurrentPosition() {
-        return rotation.getCurrentPosition();
+        return hanger.getCurrentPosition();
     }
 }
