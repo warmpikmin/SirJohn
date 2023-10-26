@@ -31,7 +31,7 @@ public class SirJohn extends Robot {
 
     @Override
     protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
-        this.camera = new Camera("Webcam 1", hardwareMap, telemetry);
+        this.camera = new Camera("Webcam 1", hardwareMap, telemetry, mecanum);
         this.isTeleOp = isTeleOp;
         //TODO figure out the three values for intake and figure out slides and hanger values
         this.intake = new Intake("arm", "claw", hardwareMap, telemetry, isTeleOp, 0, 0,0);

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Components;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Camera implements Component {
@@ -24,11 +26,14 @@ public class Camera implements Component {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
     public String deviceName;
+    public Mecanum mecanum;
 
-    public Camera(String deviceName, HardwareMap hardwareMap, Telemetry telemetry) {
+
+    public Camera(String deviceName, HardwareMap hardwareMap, Telemetry telemetry, Mecanum mecanum) {
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, deviceName), hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()));
         this.telemetry = telemetry;
         this.deviceName = deviceName;
+        this.mecanum = mecanum;
 
     }
 
@@ -88,6 +93,14 @@ public class Camera implements Component {
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
 
+    }
+    public void driveToTag(int wantedAprilTag){
+        ArrayList<AprilTagDetection> list = aprilTag.getDetections();
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).id == wantedAprilTag){
+
+            }
+        }
     }
 
 }
