@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Base.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Base.Robot;
-import org.firstinspires.ftc.teamcode.Bots.PostBot;
 
 @TeleOp
 public class MainOp extends BaseOpMode {

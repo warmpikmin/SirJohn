@@ -12,8 +12,7 @@ import org.firstinspires.ftc.teamcode.Base.Component;
 
 @Config
 public class Slides implements Component {
-    private final DcMotor rightArm;
-    private final DcMotor leftArm;
+    private final DcMotor slides;
     public double PULSES_PER_REVOLUTION;
     public int LOWER_BOUND;
     public int ZERO_POSITION;
@@ -27,8 +26,7 @@ public class Slides implements Component {
     Telemetry telemetry;
 
     public Slides(
-            String rightArmName,
-            String leftArmName,
+            String armName,
             HardwareMap hardwareMap,
             Telemetry telemetry,
             boolean isTeleOp,
@@ -37,11 +35,9 @@ public class Slides implements Component {
             double upperBound,
             double placePosition
     ) {
-        rightArm = hardwareMap.get(DcMotor.class, rightArmName);
-        leftArm = hardwareMap.get(DcMotor.class, leftArmName);
+        slides = hardwareMap.get(DcMotor.class, armName);
 
-        rightArm.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
+        slides.setDirection(DcMotorSimple.Direction.FORWARD);
 
         this.PULSES_PER_REVOLUTION = 384.5;
         this.LOWER_BOUND = (int) (lowerBound * PULSES_PER_REVOLUTION);
@@ -55,10 +51,8 @@ public class Slides implements Component {
 
     @Override
     public void init() {
-        leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         move(isTeleOp ? ZERO_POSITION : LOWER_BOUND);
     }
 
@@ -69,6 +63,7 @@ public class Slides implements Component {
     @Override
     public void update() {
         error = targetPosition - getCurrentPosition();
+        setPower(1);
         //set power to something
     }
 
@@ -78,8 +73,7 @@ public class Slides implements Component {
         telemetry.addData("SlideTarget", targetPosition);
         telemetry.addData("SlideError", error);
         telemetry.addData("SlidePower", power);
-        telemetry.addData("Left", leftArm.getCurrentPosition());
-        telemetry.addData("Right", rightArm.getCurrentPosition());
+        telemetry.addData("Slides", slides.getCurrentPosition());
         return null;
     }
 
@@ -97,8 +91,7 @@ public class Slides implements Component {
 
     public void setPower(double motorPower) {
         if (motorPower > 1) motorPower = 1;
-        rightArm.setPower(motorPower);
-        leftArm.setPower(motorPower);
+        slides.setPower(motorPower);
     }
 
     public boolean isBusy() {
@@ -106,6 +99,6 @@ public class Slides implements Component {
     }
 
     public int getCurrentPosition() {
-        return Math.min(leftArm.getCurrentPosition(), rightArm.getCurrentPosition());
+        return slides.getCurrentPosition();
     }
 }

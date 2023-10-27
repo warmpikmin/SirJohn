@@ -39,6 +39,7 @@ public class SirJohn extends Robot {
         this.hanger = new Hanger("hanger", hardwareMap, telemetry, isTeleOp, 0,0,0);
         this.mecanum = new Mecanum(hardwareMap,"frontLeft", "frontRight", "backLeft", "backRight",telemetry);
         this.crossbow = new Crossbow("crossbow", hardwareMap, telemetry, 0.5, 0);
+        this.slides = new Slides("slides", hardwareMap, telemetry, isTeleOp, 0, 0, 0,0);
         this.mecanum.fl.setDirection(DcMotorSimple.Direction.REVERSE);
         this.mecanum.fr.setDirection(DcMotorSimple.Direction.FORWARD);
         this.mecanum.bl.setDirection(DcMotorSimple.Direction.REVERSE);
