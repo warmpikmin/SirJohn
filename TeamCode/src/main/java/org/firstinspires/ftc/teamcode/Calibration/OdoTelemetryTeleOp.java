@@ -6,13 +6,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Base.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Base.Robot;
+import org.firstinspires.ftc.teamcode.Bots.SirJohn;
 
 
 @TeleOp(group = "calibration")
 @Disabled
 public class OdoTelemetryTeleOp extends BaseOpMode {
 
-    private PostBot driveBot;
+    private SirJohn driveBot;
 
 
     private DcMotor left;
@@ -21,7 +22,7 @@ public class OdoTelemetryTeleOp extends BaseOpMode {
 
     @Override
     public Robot setRobot() {
-        driveBot = new PostBot();
+        driveBot = new SirJohn();
         return driveBot;
     }
 
