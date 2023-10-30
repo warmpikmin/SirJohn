@@ -1,3 +1,5 @@
+https://github.com/Vertigo18523/SirJohn/tree/main/TeamCode/src/main/java/org/firstinspires/ftc/teamcode
+
 ## NOTICE
 
 This repository contains the public FTC SDK for the CENTERSTAGE (2023-2024) competition season.
