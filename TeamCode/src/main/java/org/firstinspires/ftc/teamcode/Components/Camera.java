@@ -189,9 +189,17 @@ public class Camera implements Component {
 
 
 
+        leftBlueMat.release();
+        rightBlueMat.release();
+        centerBlueMat.release();
+        leftRedMat.release();
+        rightRedMat.release();
+        centerRedMat.release();
+        leftBlurredMat.release();
+        centerBlurredMat.release();
+        rightRedMat.release();
 
-
-
+        telemetry.update();
 
         return input;
     }
