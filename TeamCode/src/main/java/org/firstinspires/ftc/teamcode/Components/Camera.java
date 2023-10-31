@@ -27,6 +27,13 @@ public class Camera implements Component {
     private AprilTagProcessor aprilTag;
     public String deviceName;
     public Mecanum mecanum;
+    private volatile ParkingPosition position = ParkingPosition.RIGHT;
+    public enum ParkingPosition {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+    //TODO make a way to find out where the team game element is
 
 
     public Camera(String deviceName, HardwareMap hardwareMap, Telemetry telemetry, Mecanum mecanum) {
