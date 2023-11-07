@@ -12,7 +12,8 @@ import org.firstinspires.ftc.teamcode.Base.Component;
 
 @Config
 public class Slides implements Component {
-    private final DcMotor slides;
+    private final DcMotor rightArm;
+    private final DcMotor leftArm;
     public double PULSES_PER_REVOLUTION;
     public int LOWER_BOUND;
     public int ZERO_POSITION;
@@ -27,7 +28,8 @@ public class Slides implements Component {
     Telemetry telemetry;
 
     public Slides(
-            String armName,
+            String rightArmName,
+            String leftArmName,
             HardwareMap hardwareMap,
             Telemetry telemetry,
             boolean isTeleOp,
@@ -37,9 +39,11 @@ public class Slides implements Component {
             double placePosition,
             double upperPlacePosition
     ) {
-        slides = hardwareMap.get(DcMotor.class, armName);
+        rightArm = hardwareMap.get(DcMotor.class, rightArmName);
+        leftArm = hardwareMap.get(DcMotor.class, leftArmName);
 
-        slides.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightArm.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.PULSES_PER_REVOLUTION = 384.5;
         this.LOWER_BOUND = (int) (lowerBound * PULSES_PER_REVOLUTION);
@@ -54,8 +58,10 @@ public class Slides implements Component {
 
     @Override
     public void init() {
-        slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         move(isTeleOp ? ZERO_POSITION : LOWER_BOUND);
     }
 
@@ -76,7 +82,8 @@ public class Slides implements Component {
         telemetry.addData("SlideTarget", targetPosition);
         telemetry.addData("SlideError", error);
         telemetry.addData("SlidePower", power);
-        telemetry.addData("Slides", slides.getCurrentPosition());
+        telemetry.addData("Left", leftArm.getCurrentPosition());
+        telemetry.addData("Right", rightArm.getCurrentPosition());
         return null;
     }
 
