@@ -112,6 +112,6 @@ public class Slides implements Component {
     }
 
     public int getCurrentPosition() {
-        return slides.getCurrentPosition();
+        return Math.min(leftArm.getCurrentPosition(), rightArm.getCurrentPosition());
     }
 }
