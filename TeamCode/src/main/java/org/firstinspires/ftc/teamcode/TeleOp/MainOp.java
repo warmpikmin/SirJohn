@@ -30,12 +30,6 @@ public class MainOp extends BaseOpMode{
     @Override
     public void onStart() throws InterruptedException {
 
-        };
-
-        gamepadListener1.start.onRelease = () -> {
-            slowmode = !slowmode;
-        };
-
     }
 
     @Override
@@ -60,6 +54,4 @@ public class MainOp extends BaseOpMode{
         robot.mecanum.drive(x * speed, y * speed, rot * speed);
         telemetry.update();
     }
-}
-
 }
