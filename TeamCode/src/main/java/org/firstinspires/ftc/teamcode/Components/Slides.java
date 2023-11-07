@@ -103,7 +103,8 @@ public class Slides implements Component {
 
     public void setPower(double motorPower) {
         if (motorPower > 1) motorPower = 1;
-        slides.setPower(motorPower);
+        rightArm.setPower(motorPower);
+        leftArm.setPower(motorPower);
     }
 
     public boolean isBusy() {
