@@ -36,6 +36,8 @@ public class RedClose extends BaseOpMode {
         drive.setPoseEstimate(startPose);
         test = drive.trajectoryBuilder(startPose).splineTo(new Vector2d(12,6), 0).build();
         drive.followTrajectoryAsync(test);
+        robot.camera.init();
+
 
     }
     @Override
@@ -45,6 +47,7 @@ public class RedClose extends BaseOpMode {
     @Override
     public void onUpdate(){
         drive.update();
+        robot.camera.update();
 
     }
 }

@@ -20,11 +20,11 @@ public abstract class BaseOpMode extends LinearOpMode {
 
         try {
             robot.mapHardware(hardwareMap, telemetry, this, isTeleOp);
-            robot.components.forEach(Component::init);
-        } catch (NullPointerException e){
-            throw new NullPointerException("robot is null or component is null");
-        }
 
+        } catch (NullPointerException e){
+            throw new NullPointerException(e + " is null");
+        }
+        robot.components.forEach(Component::init);
         onInit();
 
         waitForStart();
