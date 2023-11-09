@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Components;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -32,23 +34,39 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Camera implements Component, VisionProcessor {
+public class Camera implements Component {
 
     private final Telemetry telemetry;
     private VisionPortal visionPortal;
+    private FirstVisionProcessor visionProcessor;
     private AprilTagProcessor aprilTag;
     public String deviceName;
     public HardwareMap hardwareMap;
     public boolean isRunning = false;
+    public double centerBluePercent;
+    public double centerRedPercent;
+    public double leftBluePercent;
+    public  double leftRedPercent;
+    public double rightBluePercent;
+    public double rightRedPercent;
     private volatile ParkingPosition position = ParkingPosition.RIGHT;
+    private final Scalar BLACK = new Scalar(255,255,255);
     private static Scalar
-            lowerRedBounds = new Scalar(175, 0, 0, 255),
-            upperRedBounds = new Scalar(255, 50, 50, 255),
-            lowerBlueBounds = new Scalar(0, 0, 175, 255),
-            upperBlueBounds = new Scalar(50, 50, 255, 255);
+            lowerRedBounds = new Scalar(100, 0, 0, 255),
+            upperRedBounds = new Scalar(255, 150, 150, 255),
+            lowerBlueBounds = new Scalar(0, 0, 100, 255),
+            upperBlueBounds = new Scalar(150, 150, 255, 255);
+
+
+    public Rect rectLeft = new Rect(110, 42, 40, 40);
+    public Rect rectMiddle = new Rect(160, 42, 40, 40);
+    public Rect rectRight = new Rect(210, 42, 40, 40);
+    public Rect rect = new Rect(20, 20, 50, 50);
+
 
     public Mat rightBlueMat = new Mat(),
             rightRedMat = new Mat(),
+            kernel = new Mat(),
             leftBlurredMat = new Mat(),
             leftBlueMat = new Mat(),
             centerBlueMat = new Mat(),
@@ -57,22 +75,8 @@ public class Camera implements Component, VisionProcessor {
             centerBlurredMat = new Mat(),
             rightBlurredMat = new Mat();
 
-    @Override
-    public void init(int width, int height, CameraCalibration calibration) {
 
-    }
 
-    @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
-        processFrame(frame);
-        return null;
-
-    }
-
-    @Override
-    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
-
-    }
 
     public enum ParkingPosition {
         LEFT,
@@ -90,11 +94,12 @@ public class Camera implements Component, VisionProcessor {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
+        visionProcessor = new FirstVisionProcessor();
+
 
         // Create the vision portal the easy way.
 
-        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, deviceName), aprilTag);
-
+        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, deviceName), aprilTag,visionProcessor);
     }
 
     @Override
@@ -105,12 +110,12 @@ public class Camera implements Component, VisionProcessor {
 
     @Override
     public void start() {
-
     }
 
     @Override
     public void update() {
         telemetryAprilTag();
+
 
 
         // Push telemetry to the Driver Station.
@@ -144,6 +149,12 @@ public class Camera implements Component, VisionProcessor {
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
+        telemetry.addData("centerBluePercent",centerBluePercent);
+        telemetry.addData("centerRedPercent",centerRedPercent);
+        telemetry.addData("rightBluePercent",rightBluePercent);
+        telemetry.addData("rightRedPercent",rightRedPercent);
+        telemetry.addData("leftBluePercent",leftBluePercent);
+        telemetry.addData("leftRedPercent",leftRedPercent);
 
     }
 
@@ -158,20 +169,62 @@ public class Camera implements Component, VisionProcessor {
 //            }
 //        }
 //    }
+    class FirstVisionProcessor implements VisionProcessor {
 
         //TODO find out rectangle values
-        public Rect leftRect = new Rect(0, 0, 100, 200);
-        public Rect rightRect = new Rect(300, 0, 100, 200);
-        public Rect centerRect = new Rect(100, 0, 100, 200);
+        public Rect leftRect = new Rect(0, 60, 100, 200);
+        public Rect rightRect = new Rect(100, 0, 100, 200);
+        public Rect centerRect = new Rect(300, 20, 100, 200);
+
+        @Override
+        public void init(int width, int height, CameraCalibration calibration) {
+
+        }
+
+        @Override
+        public Object processFrame(Mat frame, long captureTimeNanos) {
+            processFrame(frame);
+            telemetry.addLine("processFrame numero dos is working and in a loop");
+            telemetry.update();
+            return null;
+
+        }
+
+        private android.graphics.Rect makeGraphicsRect(Rect rect, float scaleBmpPxToCanvasPx) {
+            int left = Math.round(rect.x * scaleBmpPxToCanvasPx);
+            int top = Math.round(rect.y * scaleBmpPxToCanvasPx);
+            int right = left + Math.round(rect.width * scaleBmpPxToCanvasPx);
+            int bottom = top + Math.round(rect.height * scaleBmpPxToCanvasPx);
+
+            return new android.graphics.Rect(left, top, right, bottom);
+        }
+
+        @Override
+        public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+
+        }
+
 
         public Mat processFrame(Mat input) {
             //TODO fix submat
+            telemetry.addLine("processFrame numero uno is working in a loop");
+
+
+
             Imgproc.blur(input, leftBlurredMat, new Size(5, 5));
             Imgproc.blur(input, centerBlurredMat, new Size(5, 5));
             Imgproc.blur(input, rightBlurredMat, new Size(5, 5));
+            kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
+            Imgproc.morphologyEx(leftBlurredMat, leftBlurredMat, Imgproc.MORPH_CLOSE, kernel);
+            Imgproc.morphologyEx(rightBlurredMat,rightBlurredMat,Imgproc.MORPH_CLOSE, kernel);
+            Imgproc.morphologyEx(centerBlurredMat,centerBlurredMat,Imgproc.MORPH_CLOSE, kernel);
             leftBlurredMat = leftBlurredMat.submat(leftRect);
             rightBlurredMat = rightBlurredMat.submat(rightRect);
             centerBlurredMat = centerBlurredMat.submat(centerRect);
+            Imgproc.rectangle(input,rectLeft,BLACK);
+            Imgproc.rectangle(input,rectMiddle,BLACK);
+            Imgproc.rectangle(input,rectLeft,BLACK);
+
 
             Core.inRange(rightBlurredMat, lowerBlueBounds, upperBlueBounds, rightBlueMat);
             Core.inRange(leftBlurredMat, lowerBlueBounds, upperBlueBounds, leftBlueMat);
@@ -182,12 +235,13 @@ public class Camera implements Component, VisionProcessor {
             Core.inRange(leftBlurredMat, lowerRedBounds, upperRedBounds, leftRedMat);
             Core.inRange(centerBlurredMat, lowerRedBounds, upperRedBounds, centerRedMat);
 
-            double centerBluePercent = Core.countNonZero(centerBlueMat);
-            double centerRedPercent = Core.countNonZero(centerRedMat);
-            double leftBluePercent = Core.countNonZero(leftBlueMat);
-            double leftRedPercent = Core.countNonZero(leftRedMat);
-            double rightBluePercent = Core.countNonZero(rightBlueMat);
-            double rightRedPercent = Core.countNonZero(centerRedMat);
+            centerBluePercent = Core.countNonZero(centerBlueMat);
+            centerRedPercent = Core.countNonZero(centerRedMat);
+            leftBluePercent = Core.countNonZero(leftBlueMat);
+            leftRedPercent = Core.countNonZero(leftRedMat);
+            rightBluePercent = Core.countNonZero(rightBlueMat);
+            rightRedPercent = Core.countNonZero(centerRedMat);
+
 
             boolean isBlue = Math.max(centerBluePercent, centerRedPercent) == centerBluePercent;
 
@@ -216,6 +270,7 @@ public class Camera implements Component, VisionProcessor {
             }
 
 
+
             leftBlueMat.release();
             rightBlueMat.release();
             centerBlueMat.release();
@@ -230,5 +285,6 @@ public class Camera implements Component, VisionProcessor {
 
             return input;
         }
-
     }
+
+}
