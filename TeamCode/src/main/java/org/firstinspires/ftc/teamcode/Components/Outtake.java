@@ -7,11 +7,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 
 public class Outtake implements Component {
-
     private Servo spin;
     private Servo pins;
     public boolean spinIsSpun;
-    public boolean pinIsPinned;
+    public Pins pinsPlacement;
     public double pinRelease;
     public double pinHold;
     public double spun;
@@ -40,28 +39,54 @@ public class Outtake implements Component {
     public void update() {
 
     }
-    //TODO figure out all the servo values
-    public void closePins(){
-        pins.setPosition(pinHold);
-        pinIsPinned = true;
+    public enum Pins{
+        CLOSED,
+        MID,
+        OPEN;
+    }
+
+    public void closedPins(){
+        pinsPlacement = Pins.CLOSED;
+        //updatePosPins();
+    }
+    public void midPins(){
+        pinsPlacement = Pins.MID;
+        //updatePosPins();
     }
     public void openPins(){
-        pins.setPosition(pinRelease);
-        pinIsPinned = false;
+        pinsPlacement = Pins.OPEN;
+        //updatePosPins();
+    }
+    public void togglePins(){
+        //switch between closed, mid, and open
+    }
+    public void updatePosPins(){
+        //change position
     }
     public void flip(){
-        spin.setPosition(spun);
         spinIsSpun = true;
+        updatePosFlip();
     }
     public void unFlip(){
-        spin.setPosition(unSpun);
         spinIsSpun = false;
+        updatePosFlip();
+    }
+    public void toggleFlip(){
+        spinIsSpun = !spinIsSpun;
+        updatePosFlip();
+    }
+    public void updatePosFlip(){
+        if(spinIsSpun){
+            spin.setPosition(spun);
+        }else{
+            spin.setPosition(unSpun);
+        }
     }
 
     @Override
     public String getTelemetry() {
         telemetry.addData("pinsPos",pins.getPosition());
-        telemetry.addData("pinIsPinned", pinIsPinned);
+        telemetry.addData("pinIsPinned", pins);
         telemetry.addData("spinsPos",spin.getPosition());
         telemetry.addData("spinIsSpun",spinIsSpun);
         return null;

@@ -19,12 +19,24 @@ public class Intake implements Component {
     public int INIT;
     public int FORWARD;
     public int BACKWARD;
+    public double closed;
+    public double open;
     public static int targetPosition = 0;
     public boolean isClosed;
     public boolean isTeleOp, forcePosition;
     public double error, prevError = 0, time, prevTime = System.nanoTime() * 1e-9d, power;
     public static double kP = 0.01, kD = 0, kG = 0;
-    public Intake(String armName, String clawName, HardwareMap hardwareMap,Telemetry telemetry, boolean isTeleOp, double init, double forward, double backward){
+    public Intake(
+            String armName,
+            String clawName,
+            HardwareMap hardwareMap,
+            Telemetry telemetry,
+            boolean isTeleOp,
+            double init,
+            double forward,
+            double backward,
+            double closed,
+            double open){
         claw = hardwareMap.get(Servo.class, clawName);
         this.telemetry = telemetry;
         this.arm = hardwareMap.dcMotor.get(armName);
@@ -76,13 +88,26 @@ public class Intake implements Component {
     }
     //TODO figure out correct servo values
     public void closeClaw(){
-        claw.setPosition(0);
         isClosed = true;
+        updatePos();
     }
     //TODO figure out correct servo values
     public void openClaw(){
-        claw.setPosition(1);
         isClosed = false;
+        updatePos();
+    }
+
+    public void toggleClaw(){
+        isClosed = !isClosed;
+        updatePos();
+    }
+
+    public void updatePos(){
+        if(isClosed){
+            claw.setPosition(closed);
+        }else{
+            claw.setPosition(open);
+        }
     }
 
     @Override
