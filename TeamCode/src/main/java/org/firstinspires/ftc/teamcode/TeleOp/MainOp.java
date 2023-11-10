@@ -30,6 +30,28 @@ public class MainOp extends BaseOpMode{
     @Override
     public void onStart() throws InterruptedException {
 
+        gamepadListener1.start.onRelease = () -> {
+            slowmode = !slowmode;
+        };
+
+        gamepadListener2.a.onPress = () -> {
+            robot.intake.toggleClaw();
+        };
+
+        gamepadListener2.b.onPress = () -> {
+            //flip grabber
+        };
+
+        gamepadListener2.dd.onPress = () -> {
+            //low height
+        };
+        gamepadListener2.dl.onPress = () -> {
+            //mid height
+        };
+        gamepadListener2.du.onPress = () -> {
+            //high height
+        };
+
     }
 
     @Override
@@ -50,6 +72,8 @@ public class MainOp extends BaseOpMode{
         } else if (gamepad1.dpad_left) {
             x = - 1;
         }
+
+        //slides movement!
 
         robot.mecanum.drive(x * speed, y * speed, rot * speed);
         telemetry.update();

@@ -7,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 
 public class Outtake implements Component {
-
     private Servo spin;
     private Servo pins;
     public boolean spinIsSpun;
@@ -40,22 +39,34 @@ public class Outtake implements Component {
     public void update() {
 
     }
-    //TODO figure out all the servo values
+
     public void closePins(){
-        pins.setPosition(pinHold);
-        pinIsPinned = true;
+        //close
     }
     public void openPins(){
-        pins.setPosition(pinRelease);
-        pinIsPinned = false;
+        //open
+    }
+    public void togglePins(){
+        //change
     }
     public void flip(){
-        spin.setPosition(spun);
         spinIsSpun = true;
+        updatePosFlip();
     }
     public void unFlip(){
-        spin.setPosition(unSpun);
         spinIsSpun = false;
+        updatePosFlip();
+    }
+    public void toggleFlip(){
+        spinIsSpun = !spinIsSpun;
+        updatePosFlip();
+    }
+    public void updatePosFlip(){
+        if(spinIsSpun){
+            spin.setPosition(spun);
+        }else{
+            spin.setPosition(unSpun);
+        }
     }
 
     @Override
