@@ -34,14 +34,16 @@ public class RedClose extends BaseOpMode {
         drive = new RRMecanum(hardwareMap);
         Pose2d startPose = new Pose2d();
         drive.setPoseEstimate(startPose);
-        test = drive.trajectoryBuilder(startPose).splineTo(new Vector2d(12,6), 0).build();
+        robot.camera.setIsBlue(false);
+        //test = drive.trajectoryBuilder(startPose).splineTo(new Vector2d(12,6), 0).build();
         robot.camera.init();
 
 
     }
     @Override
     public void onStart(){
-        drive.followTrajectoryAsync(test);
+
+        //drive.followTrajectoryAsync(test);
     }
     @Override
     public void onUpdate(){

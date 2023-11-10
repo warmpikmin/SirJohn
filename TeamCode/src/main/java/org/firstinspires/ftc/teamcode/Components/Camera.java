@@ -53,10 +53,10 @@ public class Camera implements Component {
     private volatile ParkingPosition position = ParkingPosition.RIGHT;
     private final Scalar BLACK = new Scalar(255,255,255);
     private static Scalar
-            lowerRedBounds = new Scalar(100, 0, 0, 255),
-            upperRedBounds = new Scalar(255, 150, 150, 255),
-            lowerBlueBounds = new Scalar(0, 0, 100, 255),
-            upperBlueBounds = new Scalar(150, 150, 255, 255);
+            lowerRedBounds = new Scalar(175, 0, 0, 255),
+            upperRedBounds = new Scalar(255, 175, 175, 255),
+            lowerBlueBounds = new Scalar(0, 0, 175, 255),
+            upperBlueBounds = new Scalar(175, 175, 255, 255);
 
 
     public Rect rectLeft = new Rect(110, 42, 40, 40);
@@ -137,6 +137,10 @@ public class Camera implements Component {
     public String getTelemetry() {
         return null;
     }
+    public void setIsBlue(boolean isBlue){
+        this.isBlue = isBlue;
+    }
+
 
     private void telemetryAprilTag() {
 
@@ -189,8 +193,8 @@ public class Camera implements Component {
     class FirstVisionProcessor implements VisionProcessor {
 
         //TODO find out rectangle values
-        public Rect leftRect = new Rect(20, 520, 200, 200);
-        public Rect rightRect = new Rect(1060, 520, 200, 200);
+        public Rect leftRect = new Rect(20, 470, 200, 200);
+        public Rect rightRect = new Rect(1060, 470, 200, 200);
         public Rect centerRect = new Rect(540, 420, 200, 200);
 
         @Override
@@ -250,10 +254,7 @@ public class Camera implements Component {
             Imgproc.blur(input, leftBlurredMat, new Size(5, 5));
             Imgproc.blur(input, centerBlurredMat, new Size(5, 5));
             Imgproc.blur(input, rightBlurredMat, new Size(5, 5));
-            kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
-            Imgproc.morphologyEx(leftBlurredMat, leftBlurredMat, Imgproc.MORPH_CLOSE, kernel);
-            Imgproc.morphologyEx(rightBlurredMat,rightBlurredMat,Imgproc.MORPH_CLOSE, kernel);
-            Imgproc.morphologyEx(centerBlurredMat,centerBlurredMat,Imgproc.MORPH_CLOSE, kernel);
+
             leftBlurredMat = leftBlurredMat.submat(leftRect);
             rightBlurredMat = rightBlurredMat.submat(rightRect);
             centerBlurredMat = centerBlurredMat.submat(centerRect);
@@ -275,8 +276,6 @@ public class Camera implements Component {
             rightBluePercent = Core.countNonZero(rightBlueMat);
             rightRedPercent = Core.countNonZero(centerRedMat);
 
-
-            isBlue = Math.max(centerBluePercent, centerRedPercent) == centerBluePercent;
 
             if (isBlue) {
                 double maxBluePercent = Math.max(centerBluePercent, Math.max(leftBluePercent, rightBluePercent));
