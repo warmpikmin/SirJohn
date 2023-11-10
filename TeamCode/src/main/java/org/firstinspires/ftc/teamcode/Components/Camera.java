@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.Base.Component;
@@ -98,8 +99,19 @@ public class Camera implements Component {
 
 
         // Create the vision portal the easy way.
+//        VisionPortal.Builder builder = new VisionPortal.Builder();
+        android.util.Size cameraResolution = new android.util.Size(1280, 720);
+//        builder.setCameraResolution(cameraResolution);
+//
+//
+//        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, deviceName), aprilTag,visionProcessor);
 
-        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, deviceName), aprilTag,visionProcessor);
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, deviceName))
+                .addProcessors(visionProcessor, aprilTag)
+                .setCameraResolution(cameraResolution)
+                .build();
+
     }
 
     @Override
@@ -149,12 +161,14 @@ public class Camera implements Component {
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
+        telemetry.addData("Position",position);
         telemetry.addData("centerBluePercent",centerBluePercent);
         telemetry.addData("centerRedPercent",centerRedPercent);
         telemetry.addData("rightBluePercent",rightBluePercent);
         telemetry.addData("rightRedPercent",rightRedPercent);
         telemetry.addData("leftBluePercent",leftBluePercent);
         telemetry.addData("leftRedPercent",leftRedPercent);
+
 
     }
 
@@ -172,9 +186,9 @@ public class Camera implements Component {
     class FirstVisionProcessor implements VisionProcessor {
 
         //TODO find out rectangle values
-        public Rect leftRect = new Rect(0, 60, 100, 200);
-        public Rect rightRect = new Rect(100, 0, 100, 200);
-        public Rect centerRect = new Rect(300, 20, 100, 200);
+        public Rect leftRect = new Rect(0, 520, 200, 200);
+        public Rect rightRect = new Rect(1080, 520, 200, 200);
+        public Rect centerRect = new Rect(540, 420, 200, 200);
 
         @Override
         public void init(int width, int height, CameraCalibration calibration) {
@@ -201,6 +215,25 @@ public class Camera implements Component {
 
         @Override
         public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+            Paint selectedPaint = new Paint();
+            selectedPaint.setColor(Color.RED);
+            selectedPaint.setStyle(Paint.Style.STROKE);
+            selectedPaint.setStrokeWidth(scaleCanvasDensity * 4);
+            Paint selectedPaint2 = new Paint();
+            selectedPaint2.setColor(Color.BLUE);
+            selectedPaint2.setStyle(Paint.Style.STROKE);
+            selectedPaint2.setStrokeWidth(scaleCanvasDensity * 4);
+            Paint selectedPaint3 = new Paint();
+            selectedPaint3.setColor(Color.BLACK);
+            selectedPaint3.setStyle(Paint.Style.STROKE);
+            selectedPaint3.setStrokeWidth(scaleCanvasDensity * 4);
+
+            android.graphics.Rect drawRectangleLeft = makeGraphicsRect(leftRect, scaleBmpPxToCanvasPx);
+            android.graphics.Rect drawRectangleMiddle = makeGraphicsRect(centerRect,scaleBmpPxToCanvasPx);
+            android.graphics.Rect drawRectangleRight = makeGraphicsRect(rightRect, scaleBmpPxToCanvasPx);
+            canvas.drawRect(drawRectangleLeft, selectedPaint);
+            canvas.drawRect(drawRectangleMiddle, selectedPaint2);
+            canvas.drawRect(drawRectangleRight, selectedPaint3);
 
         }
 
@@ -221,9 +254,6 @@ public class Camera implements Component {
             leftBlurredMat = leftBlurredMat.submat(leftRect);
             rightBlurredMat = rightBlurredMat.submat(rightRect);
             centerBlurredMat = centerBlurredMat.submat(centerRect);
-            Imgproc.rectangle(input,rectLeft,BLACK);
-            Imgproc.rectangle(input,rectMiddle,BLACK);
-            Imgproc.rectangle(input,rectLeft,BLACK);
 
 
             Core.inRange(rightBlurredMat, lowerBlueBounds, upperBlueBounds, rightBlueMat);
@@ -286,5 +316,6 @@ public class Camera implements Component {
             return input;
         }
     }
+
 
 }
