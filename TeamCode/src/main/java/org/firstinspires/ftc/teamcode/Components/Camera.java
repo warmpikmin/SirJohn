@@ -63,7 +63,7 @@ public class Camera implements Component {
     public Rect rectMiddle = new Rect(160, 42, 40, 40);
     public Rect rectRight = new Rect(210, 42, 40, 40);
     public Rect rect = new Rect(20, 20, 50, 50);
-
+    boolean isBlue;
 
     public Mat rightBlueMat = new Mat(),
             rightRedMat = new Mat(),
@@ -167,6 +167,7 @@ public class Camera implements Component {
         telemetry.addData("rightRedPercent",rightRedPercent);
         telemetry.addData("leftBluePercent",leftBluePercent);
         telemetry.addData("leftRedPercent",leftRedPercent);
+        telemetry.addData("isBlue?",isBlue);
 
 
     }
@@ -188,8 +189,8 @@ public class Camera implements Component {
     class FirstVisionProcessor implements VisionProcessor {
 
         //TODO find out rectangle values
-        public Rect leftRect = new Rect(0, 520, 200, 200);
-        public Rect rightRect = new Rect(1080, 520, 200, 200);
+        public Rect leftRect = new Rect(20, 520, 200, 200);
+        public Rect rightRect = new Rect(1060, 520, 200, 200);
         public Rect centerRect = new Rect(540, 420, 200, 200);
 
         @Override
@@ -218,11 +219,11 @@ public class Camera implements Component {
         @Override
         public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
             Paint selectedPaint = new Paint();
-            selectedPaint.setColor(Color.RED);
+            selectedPaint.setColor(Color.BLACK);
             selectedPaint.setStyle(Paint.Style.STROKE);
             selectedPaint.setStrokeWidth(scaleCanvasDensity * 4);
             Paint selectedPaint2 = new Paint();
-            selectedPaint2.setColor(Color.BLUE);
+            selectedPaint2.setColor(Color.BLACK);
             selectedPaint2.setStyle(Paint.Style.STROKE);
             selectedPaint2.setStrokeWidth(scaleCanvasDensity * 4);
             Paint selectedPaint3 = new Paint();
@@ -275,7 +276,7 @@ public class Camera implements Component {
             rightRedPercent = Core.countNonZero(centerRedMat);
 
 
-            boolean isBlue = Math.max(centerBluePercent, centerRedPercent) == centerBluePercent;
+            isBlue = Math.max(centerBluePercent, centerRedPercent) == centerBluePercent;
 
             if (isBlue) {
                 double maxBluePercent = Math.max(centerBluePercent, Math.max(leftBluePercent, rightBluePercent));
