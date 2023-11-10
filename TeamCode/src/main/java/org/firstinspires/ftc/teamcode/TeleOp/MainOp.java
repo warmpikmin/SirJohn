@@ -56,7 +56,7 @@ public class MainOp extends BaseOpMode{
 
     @Override
     public void onUpdate() throws InterruptedException {
-        speed = (gamepad1.left_bumper ? 0.25 : (gamepad1.right_bumper || slowmode ? 0.5 : 1)) * (gamepad1.left_stick_button ? 1 : 0.65);
+        speed = (gamepad1.left_bumper ? 0.25 : (gamepad1.right_bumper || slowmode ? 0.5 : 1)) * (gamepad1.left_stick_button ? 1 : 0.75);
         x = gamepad1.left_stick_x;
         y = - gamepad1.left_stick_y;
         rot = gamepad1.right_stick_x;

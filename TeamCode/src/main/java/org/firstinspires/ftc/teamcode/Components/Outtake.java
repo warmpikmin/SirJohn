@@ -10,7 +10,7 @@ public class Outtake implements Component {
     private Servo spin;
     private Servo pins;
     public boolean spinIsSpun;
-    public boolean pinIsPinned;
+    public Pins pinsPlacement;
     public double pinRelease;
     public double pinHold;
     public double spun;
@@ -39,15 +39,29 @@ public class Outtake implements Component {
     public void update() {
 
     }
+    public enum Pins{
+        CLOSED,
+        MID,
+        OPEN;
+    }
 
-    public void closePins(){
-        //close
+    public void closedPins(){
+        pinsPlacement = Pins.CLOSED;
+        //updatePosPins();
+    }
+    public void midPins(){
+        pinsPlacement = Pins.MID;
+        //updatePosPins();
     }
     public void openPins(){
-        //open
+        pinsPlacement = Pins.OPEN;
+        //updatePosPins();
     }
     public void togglePins(){
-        //change
+        //switch between closed, mid, and open
+    }
+    public void updatePosPins(){
+        //change position
     }
     public void flip(){
         spinIsSpun = true;
@@ -72,7 +86,7 @@ public class Outtake implements Component {
     @Override
     public String getTelemetry() {
         telemetry.addData("pinsPos",pins.getPosition());
-        telemetry.addData("pinIsPinned", pinIsPinned);
+        telemetry.addData("pinIsPinned", pins);
         telemetry.addData("spinsPos",spin.getPosition());
         telemetry.addData("spinIsSpun",spinIsSpun);
         return null;
