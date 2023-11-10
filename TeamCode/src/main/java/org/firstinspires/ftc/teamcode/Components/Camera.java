@@ -193,8 +193,8 @@ public class Camera implements Component {
     class FirstVisionProcessor implements VisionProcessor {
 
         //TODO find out rectangle values
-        public Rect leftRect = new Rect(20, 470, 200, 200);
-        public Rect rightRect = new Rect(1060, 470, 200, 200);
+        public Rect leftRect = new Rect(70, 470, 200, 200);
+        public Rect rightRect = new Rect(1020, 470, 200, 200);
         public Rect centerRect = new Rect(540, 420, 200, 200);
 
         @Override
@@ -274,7 +274,7 @@ public class Camera implements Component {
             leftBluePercent = Core.countNonZero(leftBlueMat);
             leftRedPercent = Core.countNonZero(leftRedMat);
             rightBluePercent = Core.countNonZero(rightBlueMat);
-            rightRedPercent = Core.countNonZero(centerRedMat);
+            rightRedPercent = Core.countNonZero(rightRedMat);
 
 
             if (isBlue) {
