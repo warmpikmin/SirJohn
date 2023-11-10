@@ -117,7 +117,6 @@ public class Camera implements Component {
     @Override
     public void init() {
 
-
     }
 
     @Override
@@ -170,6 +169,9 @@ public class Camera implements Component {
         telemetry.addData("leftRedPercent",leftRedPercent);
 
 
+    }
+    public ParkingPosition getPosition(){
+        return position;
     }
 
 
