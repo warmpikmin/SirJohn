@@ -26,9 +26,11 @@ public class MainOp extends BaseOpMode{
     @Override
     public void onInit() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
     }
     @Override
     public void onStart() throws InterruptedException {
+        robot.camera.isInit = false;
 
         gamepadListener1.start.onRelease = () -> {
             slowmode = !slowmode;

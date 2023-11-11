@@ -64,6 +64,7 @@ public class Camera implements Component {
     public Rect rectRight = new Rect(210, 42, 40, 40);
     public Rect rect = new Rect(20, 20, 50, 50);
     boolean isBlue;
+    public boolean isInit;
 
     public Mat rightBlueMat = new Mat(),
             rightRedMat = new Mat(),
@@ -121,6 +122,7 @@ public class Camera implements Component {
 
     @Override
     public void start() {
+
     }
 
     @Override
@@ -249,74 +251,76 @@ public class Camera implements Component {
             //TODO fix submat
             telemetry.addLine("processFrame numero uno is working in a loop");
 
+            if (isInit) {
+
+                Imgproc.blur(input, leftBlurredMat, new Size(5, 5));
+                Imgproc.blur(input, centerBlurredMat, new Size(5, 5));
+                Imgproc.blur(input, rightBlurredMat, new Size(5, 5));
+
+                leftBlurredMat = leftBlurredMat.submat(leftRect);
+                rightBlurredMat = rightBlurredMat.submat(rightRect);
+                centerBlurredMat = centerBlurredMat.submat(centerRect);
 
 
-            Imgproc.blur(input, leftBlurredMat, new Size(5, 5));
-            Imgproc.blur(input, centerBlurredMat, new Size(5, 5));
-            Imgproc.blur(input, rightBlurredMat, new Size(5, 5));
-
-            leftBlurredMat = leftBlurredMat.submat(leftRect);
-            rightBlurredMat = rightBlurredMat.submat(rightRect);
-            centerBlurredMat = centerBlurredMat.submat(centerRect);
+                Core.inRange(rightBlurredMat, lowerBlueBounds, upperBlueBounds, rightBlueMat);
+                Core.inRange(leftBlurredMat, lowerBlueBounds, upperBlueBounds, leftBlueMat);
+                Core.inRange(centerBlurredMat, lowerBlueBounds, upperBlueBounds, centerBlueMat);
 
 
-            Core.inRange(rightBlurredMat, lowerBlueBounds, upperBlueBounds, rightBlueMat);
-            Core.inRange(leftBlurredMat, lowerBlueBounds, upperBlueBounds, leftBlueMat);
-            Core.inRange(centerBlurredMat, lowerBlueBounds, upperBlueBounds, centerBlueMat);
+                Core.inRange(rightBlurredMat, lowerRedBounds, upperRedBounds, rightRedMat);
+                Core.inRange(leftBlurredMat, lowerRedBounds, upperRedBounds, leftRedMat);
+                Core.inRange(centerBlurredMat, lowerRedBounds, upperRedBounds, centerRedMat);
+
+                centerBluePercent = Core.countNonZero(centerBlueMat);
+                centerRedPercent = Core.countNonZero(centerRedMat);
+                leftBluePercent = Core.countNonZero(leftBlueMat);
+                leftRedPercent = Core.countNonZero(leftRedMat);
+                rightBluePercent = Core.countNonZero(rightBlueMat);
+                rightRedPercent = Core.countNonZero(rightRedMat);
 
 
-            Core.inRange(rightBlurredMat, lowerRedBounds, upperRedBounds, rightRedMat);
-            Core.inRange(leftBlurredMat, lowerRedBounds, upperRedBounds, leftRedMat);
-            Core.inRange(centerBlurredMat, lowerRedBounds, upperRedBounds, centerRedMat);
-
-            centerBluePercent = Core.countNonZero(centerBlueMat);
-            centerRedPercent = Core.countNonZero(centerRedMat);
-            leftBluePercent = Core.countNonZero(leftBlueMat);
-            leftRedPercent = Core.countNonZero(leftRedMat);
-            rightBluePercent = Core.countNonZero(rightBlueMat);
-            rightRedPercent = Core.countNonZero(rightRedMat);
-
-
-            if (isBlue) {
-                double maxBluePercent = Math.max(centerBluePercent, Math.max(leftBluePercent, rightBluePercent));
-                if (maxBluePercent == centerBluePercent) {
-                    position = ParkingPosition.CENTER;
-                } else if (maxBluePercent == leftBluePercent) {
-                    position = ParkingPosition.LEFT;
-                } else if (maxBluePercent == rightBluePercent) {
-                    position = ParkingPosition.RIGHT;
+                if (isBlue) {
+                    double maxBluePercent = Math.max(centerBluePercent, Math.max(leftBluePercent, rightBluePercent));
+                    if (maxBluePercent == centerBluePercent) {
+                        position = ParkingPosition.CENTER;
+                    } else if (maxBluePercent == leftBluePercent) {
+                        position = ParkingPosition.LEFT;
+                    } else if (maxBluePercent == rightBluePercent) {
+                        position = ParkingPosition.RIGHT;
+                    } else {
+                        telemetry.addLine("does not see anything, but knows it is blue");
+                    }
                 } else {
-                    telemetry.addLine("does not see anything, but knows it is blue");
+                    double maxRedPercent = Math.max(centerRedPercent, Math.max(leftRedPercent, rightRedPercent));
+                    if (maxRedPercent == centerRedPercent) {
+                        position = ParkingPosition.CENTER;
+                    } else if (maxRedPercent == leftRedPercent) {
+                        position = ParkingPosition.LEFT;
+                    } else if (maxRedPercent == rightRedPercent) {
+                        position = ParkingPosition.RIGHT;
+                    } else {
+                        telemetry.addLine("does not see anything, but knows it is red");
+                    }
                 }
-            } else {
-                double maxRedPercent = Math.max(centerRedPercent, Math.max(leftRedPercent, rightRedPercent));
-                if (maxRedPercent == centerRedPercent) {
-                    position = ParkingPosition.CENTER;
-                } else if (maxRedPercent == leftRedPercent) {
-                    position = ParkingPosition.LEFT;
-                } else if (maxRedPercent == rightRedPercent) {
-                    position = ParkingPosition.RIGHT;
-                } else {
-                    telemetry.addLine("does not see anything, but knows it is red");
-                }
+
+
+                leftBlueMat.release();
+                rightBlueMat.release();
+                centerBlueMat.release();
+                leftRedMat.release();
+                rightRedMat.release();
+                centerRedMat.release();
+                leftBlurredMat.release();
+                centerBlurredMat.release();
+                rightRedMat.release();
+
+                telemetry.update();
+
+
             }
-
-
-
-            leftBlueMat.release();
-            rightBlueMat.release();
-            centerBlueMat.release();
-            leftRedMat.release();
-            rightRedMat.release();
-            centerRedMat.release();
-            leftBlurredMat.release();
-            centerBlurredMat.release();
-            rightRedMat.release();
-
-            telemetry.update();
-
             return input;
         }
+
     }
 
 

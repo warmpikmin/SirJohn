@@ -32,18 +32,21 @@ public class SirJohn extends Robot {
     @Override
     protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
         this.isTeleOp = isTeleOp;
-        //TODO figure out the three values for intake and figure out slides and hanger values
+        //TODO figure out the values for intake and figure out slides
         this.intake = new Intake("arm", "claw", hardwareMap, telemetry, isTeleOp, 0, 0,0,0,1);
         this.outtake = new Outtake("pins","spin", hardwareMap, telemetry, 0.5, 0, 0.5, 0);
 //        this.hanger = new Hanger("hanger", hardwareMap, telemetry, isTeleOp, 0,0,0);
         this.crossbow = new Crossbow("crossbow", hardwareMap, telemetry, 0.5, 0);
         this.slides = new Slides("rightArm","leftArm" , hardwareMap, telemetry, isTeleOp, 0, 0, 0,0,0);
-        this.mecanum = new Mecanum(hardwareMap,"frontLeft", "frontRight", "backLeft", "backRight",telemetry);
-        this.mecanum.fl.setDirection(DcMotorSimple.Direction.FORWARD);
-        this.mecanum.fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.mecanum.bl.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.mecanum.br.setDirection(DcMotorSimple.Direction.FORWARD);
+        if(isTeleOp) {
+            this.mecanum = new Mecanum(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight", telemetry);
+            this.mecanum.fl.setDirection(DcMotorSimple.Direction.FORWARD);
+            this.mecanum.fr.setDirection(DcMotorSimple.Direction.REVERSE);
+            this.mecanum.bl.setDirection(DcMotorSimple.Direction.REVERSE);
+            this.mecanum.br.setDirection(DcMotorSimple.Direction.FORWARD);
+            addComponents(mecanum);
+        }
         this.camera = new Camera("Webcam 1", hardwareMap, telemetry);
-        addComponents(camera, intake, outtake, mecanum, crossbow, slides);
+        addComponents(camera, intake, outtake, crossbow, slides);
     }
 }
