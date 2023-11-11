@@ -16,15 +16,15 @@ public class Slides implements Component {
     private final DcMotor leftArm;
     public double PULSES_PER_REVOLUTION;
     public int LOWER_BOUND;
-    public int ZERO_POSITION;
     public int UPPER_BOUND;
+    public int ZERO_POSITION;
     public int PLACE_POSITION;
     public int UPPER_PLACE_POSITION;
     public static int targetPosition = 0;
 
     public boolean isTeleOp;
 
-    public double error, power;
+    public double error, power = 0.5;
     Telemetry telemetry;
 
     public Slides(
@@ -34,8 +34,8 @@ public class Slides implements Component {
             Telemetry telemetry,
             boolean isTeleOp,
             double lowerBound,
-            double zeroPosition,
             double upperBound,
+            double zeroPosition,
             double placePosition,
             double upperPlacePosition
     ) {
@@ -47,8 +47,8 @@ public class Slides implements Component {
 
         this.PULSES_PER_REVOLUTION = 384.5;
         this.LOWER_BOUND = (int) (lowerBound * PULSES_PER_REVOLUTION);
-        this.ZERO_POSITION = (int) (zeroPosition * PULSES_PER_REVOLUTION);
         this.UPPER_BOUND = (int) (upperBound * PULSES_PER_REVOLUTION);
+        this.ZERO_POSITION = (int) (zeroPosition * PULSES_PER_REVOLUTION);
         this.PLACE_POSITION = (int) (placePosition * PULSES_PER_REVOLUTION);
         this.UPPER_PLACE_POSITION = (int) (upperPlacePosition * UPPER_PLACE_POSITION);
 
@@ -72,8 +72,7 @@ public class Slides implements Component {
     @Override
     public void update() {
         error = targetPosition - getCurrentPosition();
-        setPower(1);
-        //set power to something
+        setPower(power);
     }
 
     @Override

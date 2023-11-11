@@ -11,19 +11,19 @@ public class Outtake implements Component {
     private Servo pins;
     public boolean spinPos;
     public Pins pinsPos;
-    public double pinsClosed;
+    public double pinsIn;
     public double pinsMid;
-    public double pinsOpen;
+    public double pinsOut;
     public double spun;
     public double unSpun;
     Telemetry telemetry;
-    public Outtake(String pinsName, String spinName, HardwareMap hardwareMap, Telemetry telemetry, double pinsClosed, double pinsMid, double pinsOpen, double spun, double unSpun){
+    public Outtake(String pinsName, String spinName, HardwareMap hardwareMap, Telemetry telemetry, double pinsIn, double pinsMid, double pinsOut, double spun, double unSpun){
         pins = hardwareMap.get(Servo.class, pinsName);
         spin = hardwareMap.get(Servo.class, spinName);
         this.telemetry = telemetry;
-        this.pinsClosed = pinsClosed;
+        this.pinsIn = pinsIn;
         this.pinsMid = pinsMid;
-        this.pinsOpen = pinsOpen;
+        this.pinsOut = pinsOut;
         this.spun = spun;
         this.unSpun= unSpun;
     }
@@ -46,7 +46,7 @@ public class Outtake implements Component {
         MID,
         OPEN;
     }
-    public void closedPins(){
+    public void closePins(){
         pinsPos = Pins.CLOSED;
         updatePosPins();
     }
@@ -63,7 +63,7 @@ public class Outtake implements Component {
         updatePosPins();
     }
     public void updatePosPins(){
-        pins.setPosition(pinsPos == Pins.CLOSED ? pinsClosed : pinsPos == Pins.MID ? pinsMid : pinsOpen);
+        pins.setPosition(pinsPos == Pins.CLOSED ? pinsIn : pinsPos == Pins.MID ? pinsMid : pinsOut);
     }
     public void flip(){
         spinPos = true;
