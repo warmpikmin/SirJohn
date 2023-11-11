@@ -103,11 +103,7 @@ public class Intake implements Component {
     }
 
     public void updatePos(){
-        if(isClosed){
-            claw.setPosition(closed);
-        }else{
-            claw.setPosition(open);
-        }
+        claw.setPosition(isClosed ? closed : open);
     }
 
     @Override

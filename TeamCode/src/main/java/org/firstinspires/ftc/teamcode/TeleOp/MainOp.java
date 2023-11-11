@@ -41,17 +41,25 @@ public class MainOp extends BaseOpMode{
         };
 
         gamepadListener2.b.onPress = () -> {
-            //flip grabber
+            /*
+            deposit pixels from intake to outtake:
+
+            flip grabber,
+            make sure pins are open,
+            open claw,
+            flip grabber (back to og pos)
+
+            */
         };
 
         gamepadListener2.dd.onPress = () -> {
-            //low height
+            //slides to low height
         };
         gamepadListener2.dl.onPress = () -> {
-            //mid height
+            //slides to mid height
         };
         gamepadListener2.du.onPress = () -> {
-            //high height
+            //slides to high height
         };
 
     }
