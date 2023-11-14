@@ -43,7 +43,7 @@ public class Intake implements Component {
 
         arm.setDirection(DcMotorSimple.Direction.FORWARD);
         //TODO make PULSES_PER_REVOLUTION its actual value
-        this.PULSES_PER_REVOLUTION = 0;
+        this.PULSES_PER_REVOLUTION = 384.5;
         this.INIT = (int) (init * PULSES_PER_REVOLUTION);
         this.FORWARD = (int) (forward * PULSES_PER_REVOLUTION);
         this.BACKWARD = (int) (backward * PULSES_PER_REVOLUTION);
