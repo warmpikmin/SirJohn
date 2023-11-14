@@ -9,19 +9,21 @@ import org.firstinspires.ftc.teamcode.Base.Component;
 public class Outtake implements Component {
     private Servo spin;
     private Servo pins;
-    public boolean spinIsSpun;
-    public Pins pinsPlacement;
-    public double pinRelease;
-    public double pinHold;
+    public boolean spinPos;
+    public Pins pinsPos;
+    public double pinsIn;
+    public double pinsMid;
+    public double pinsOut;
     public double spun;
     public double unSpun;
     Telemetry telemetry;
-    public Outtake(String pinsName, String spinName, HardwareMap hardwareMap, Telemetry telemetry, double pinRelease, double pinHold, double spun, double unSpun){
+    public Outtake(String pinsName, String spinName, HardwareMap hardwareMap, Telemetry telemetry, double pinsIn, double pinsMid, double pinsOut, double spun, double unSpun){
         pins = hardwareMap.get(Servo.class, pinsName);
         spin = hardwareMap.get(Servo.class, spinName);
         this.telemetry = telemetry;
-        this.pinRelease = pinRelease;
-        this.pinHold = pinHold;
+        this.pinsIn = pinsIn;
+        this.pinsMid = pinsMid;
+        this.pinsOut = pinsOut;
         this.spun = spun;
         this.unSpun= unSpun;
     }
@@ -44,43 +46,39 @@ public class Outtake implements Component {
         MID,
         OPEN;
     }
-
-    public void closedPins(){
-        pinsPlacement = Pins.CLOSED;
-        //updatePosPins();
+    public void closePins(){
+        pinsPos = Pins.CLOSED;
+        updatePosPins();
     }
     public void midPins(){
-        pinsPlacement = Pins.MID;
-        //updatePosPins();
+        pinsPos = Pins.MID;
+        updatePosPins();
     }
     public void openPins(){
-        pinsPlacement = Pins.OPEN;
-        //updatePosPins();
+        pinsPos = Pins.OPEN;
+        updatePosPins();
     }
     public void togglePins(){
-        //switch between closed, mid, and open
+        pinsPos = (pinsPos != Pins.OPEN ? Pins.OPEN : Pins.CLOSED);
+        updatePosPins();
     }
     public void updatePosPins(){
-        //change position
+        pins.setPosition(pinsPos == Pins.CLOSED ? pinsIn : pinsPos == Pins.MID ? pinsMid : pinsOut);
     }
     public void flip(){
-        spinIsSpun = true;
+        spinPos = true;
         updatePosFlip();
     }
     public void unFlip(){
-        spinIsSpun = false;
+        spinPos = false;
         updatePosFlip();
     }
     public void toggleFlip(){
-        spinIsSpun = !spinIsSpun;
+        spinPos = !spinPos;
         updatePosFlip();
     }
     public void updatePosFlip(){
-        if(spinIsSpun){
-            spin.setPosition(spun);
-        }else{
-            spin.setPosition(unSpun);
-        }
+        spin.setPosition(spinPos ? spun : unSpun);
     }
 
     @Override
@@ -88,7 +86,7 @@ public class Outtake implements Component {
         telemetry.addData("pinsPos",pins.getPosition());
         telemetry.addData("pinIsPinned", pins);
         telemetry.addData("spinsPos",spin.getPosition());
-        telemetry.addData("spinIsSpun",spinIsSpun);
+        telemetry.addData("spinIsSpun",spinPos);
         return null;
     }
 }

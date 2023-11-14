@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Base.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Bots.SirJohn;
+import org.firstinspires.ftc.teamcode.Components.Outtake;
 
 @TeleOp
 public class MainOp extends BaseOpMode{
@@ -41,17 +42,21 @@ public class MainOp extends BaseOpMode{
         };
 
         gamepadListener2.b.onPress = () -> {
-            //flip grabber
+            //figure out what to do in the cases of 0 or 1 pixel already on outtake
+            //bc that will determine whether pins should open or not before flipping.
+            robot.outtake.flip();
+            robot.intake.openClaw();
+            robot.outtake.unFlip();
         };
 
         gamepadListener2.dd.onPress = () -> {
-            //low height
+            robot.slides.toZero();
         };
         gamepadListener2.dl.onPress = () -> {
-            //mid height
+            robot.slides.toPlace();
         };
         gamepadListener2.du.onPress = () -> {
-            //high height
+            robot.slides.toUpperPlace();
         };
 
     }
@@ -75,7 +80,16 @@ public class MainOp extends BaseOpMode{
             x = - 1;
         }
 
-        //slides movement!
+        //.014 is the value from last year's arm movement-- does this need to change?
+        if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
+            if (robot.slides.getCurrentPosition() < robot.slides.LOWER_BOUND) {
+               robot.slides.move(robot.slides.LOWER_BOUND + (int) (robot.slides.PULSES_PER_REVOLUTION * 0.014));
+            } else if (robot.slides.getCurrentPosition() > robot.slides.UPPER_BOUND) {
+                robot.slides.move(robot.slides.UPPER_BOUND - (int) (robot.slides.PULSES_PER_REVOLUTION * 0.014));
+            } else {
+                robot.slides.move((int) ((gamepad2.right_trigger - gamepad2.left_trigger) * robot.slides.PULSES_PER_REVOLUTION * 0.5) + robot.slides.getCurrentPosition());
+            }
+        }
 
         robot.mecanum.drive(x * speed, y * speed, rot * speed);
         telemetry.update();
