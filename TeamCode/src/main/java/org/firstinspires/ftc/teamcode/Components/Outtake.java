@@ -8,22 +8,22 @@ import org.firstinspires.ftc.teamcode.Base.Component;
 
 public class Outtake implements Component {
     private Servo spin;
-    private Servo pins;
+    //private Servo pins;
     public boolean spinPos;
-    public Pins pinsPos;
-    public double pinsIn;
-    public double pinsMid;
-    public double pinsOut;
+    //public Pins pinsPos;
+    //public double pinsIn;
+    //public double pinsMid;
+    //public double pinsOut;
     public double spun;
     public double unSpun;
     Telemetry telemetry;
-    public Outtake(String pinsName, String spinName, HardwareMap hardwareMap, Telemetry telemetry, double pinsIn, double pinsMid, double pinsOut, double spun, double unSpun){
-        pins = hardwareMap.get(Servo.class, pinsName);
+    public Outtake(String spinName, HardwareMap hardwareMap, Telemetry telemetry, double spun, double unSpun){
+        //pins = hardwareMap.get(Servo.class, pinsName);
         spin = hardwareMap.get(Servo.class, spinName);
         this.telemetry = telemetry;
-        this.pinsIn = pinsIn;
-        this.pinsMid = pinsMid;
-        this.pinsOut = pinsOut;
+        //this.pinsIn = pinsIn;
+        //this.pinsMid = pinsMid;
+        //this.pinsOut = pinsOut;
         this.spun = spun;
         this.unSpun= unSpun;
     }
@@ -41,11 +41,14 @@ public class Outtake implements Component {
     public void update() {
 
     }
+    /*
+
     public enum Pins{
         CLOSED,
         MID,
         OPEN;
     }
+
     public void closePins(){
         pinsPos = Pins.CLOSED;
         updatePosPins();
@@ -65,6 +68,8 @@ public class Outtake implements Component {
     public void updatePosPins(){
         pins.setPosition(pinsPos == Pins.CLOSED ? pinsIn : pinsPos == Pins.MID ? pinsMid : pinsOut);
     }
+
+    */
     public void flip(){
         spinPos = true;
         updatePosFlip();
@@ -83,8 +88,8 @@ public class Outtake implements Component {
 
     @Override
     public String getTelemetry() {
-        telemetry.addData("pinsPos",pins.getPosition());
-        telemetry.addData("pinIsPinned", pins);
+        //telemetry.addData("pinsPos",pins.getPosition());
+        //telemetry.addData("pinIsPinned", pins);
         telemetry.addData("spinsPos",spin.getPosition());
         telemetry.addData("spinIsSpun",spinPos);
         return null;

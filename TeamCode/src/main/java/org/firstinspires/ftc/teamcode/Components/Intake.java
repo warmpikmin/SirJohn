@@ -47,6 +47,8 @@ public class Intake implements Component {
         this.INIT = (int) (init * PULSES_PER_REVOLUTION);
         this.FORWARD = (int) (forward * PULSES_PER_REVOLUTION);
         this.BACKWARD = (int) (backward * PULSES_PER_REVOLUTION);
+        this.closed = closed;
+        this.open = open;
         this.isTeleOp = isTeleOp;
         this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
