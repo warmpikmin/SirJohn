@@ -24,7 +24,7 @@ public class Slides implements Component {
 
     public boolean isTeleOp;
 
-    public double error, power = 0.5;
+    public double error, power = 0;
     Telemetry telemetry;
 
     public Slides(

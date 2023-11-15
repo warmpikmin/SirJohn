@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Components;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,18 +10,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
-
+@Config
 public class Intake implements Component {
     private Servo claw;
     public DcMotor arm;
-    public Slides slides;
+
     Telemetry telemetry;
     public double PULSES_PER_REVOLUTION;
-    public int INIT;
+
     public int FORWARD;
-    public int BACKWARD;
+
     public double closed;
     public double open;
+    public static int forward;
+    public static int backward;
     public static int targetPosition = 0;
     public boolean isClosed;
     public boolean isTeleOp, forcePosition;
@@ -33,28 +36,26 @@ public class Intake implements Component {
             Telemetry telemetry,
             boolean isTeleOp,
             double init,
-            double forward,
-            double backward,
+            int forward,
+            int backward,
             double closed,
-            double open){
-        claw = hardwareMap.get(Servo.class, clawName);
-        this.telemetry = telemetry;
-        this.arm = hardwareMap.dcMotor.get(armName);
+            double open
+    ) {
+        this.claw = hardwareMap.get(Servo.class, clawName);
+        this.arm = hardwareMap.get(DcMotor.class, armName);
 
-        arm.setDirection(DcMotorSimple.Direction.FORWARD);
-        //TODO make PULSES_PER_REVOLUTION its actual value
+        this.telemetry = telemetry;
+        this.closed = closed;
+        this.open = open;
+        Intake.forward = forward;
+        Intake.backward = backward;
         this.PULSES_PER_REVOLUTION = 384.5;
-        this.INIT = (int) (init * PULSES_PER_REVOLUTION);
-        this.FORWARD = (int) (forward * PULSES_PER_REVOLUTION);
-        this.BACKWARD = (int) (backward * PULSES_PER_REVOLUTION);
         this.isTeleOp = isTeleOp;
         this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
-    public void addSlides(Slides slides){
-        this.slides = slides;
-    }
     @Override
     public void init() {
+        arm.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -67,9 +68,12 @@ public class Intake implements Component {
     @Override
     public void update() {
         update(forcePosition);
+        getTelemetry();
+        telemetry.update();
 
     }
     public void update(boolean forcePosition){
+        arm.setTargetPosition(targetPosition);
         error = targetPosition - getCurrentPosition();
         time = System.nanoTime() * 1e-9d;
         this.forcePosition = forcePosition;
@@ -83,15 +87,16 @@ public class Intake implements Component {
             this.forcePosition = false;
         }
         setPower(power);
+        //setPower(0);
         prevError = error;
         prevTime = time;
     }
-    //TODO figure out correct servo values
+
     public void closeClaw(){
         isClosed = true;
         updatePos();
     }
-    //TODO figure out correct servo values
+
     public void openClaw(){
         isClosed = false;
         updatePos();
@@ -110,48 +115,33 @@ public class Intake implements Component {
     public String getTelemetry() {
         telemetry.addData("RotationPosition", getCurrentPosition());
         telemetry.addData("RotationTarget", targetPosition);
+        telemetry.addData("RotationTargetActual", arm.getTargetPosition());
         telemetry.addData("RotationError", error);
-        telemetry.addData("RotationPower", power);
+        telemetry.addData("RotationPower", arm.getPower());
         telemetry.addData("clawIsClosed", isClosed);
+        telemetry.addData("Arm position", arm.getCurrentPosition());
+        telemetry.addData("Arm zero power behaviour",arm.getZeroPowerBehavior());
         return null;
     }
 
-    public void toInit() {
-        move(INIT);
+    public void toggleArm(){
+        if(arm.getTargetPosition() == forward){
+            arm.setTargetPosition(backward);
+        }
+        else{
+            arm.setTargetPosition(forward);
+        }
     }
 
-    public void toForward() {
-        move(FORWARD);
-    }
 
-    public void toBackward() {
-        move(BACKWARD);
-    }
 
     public void toBackwardForce() {
         update(true);
     }
-    public void toggle() {
-        if (getCurrentPosition() + error == BACKWARD) {
-            toForward();
-        } else if (getCurrentPosition() + error == FORWARD) {
-            toBackward();
-        } else { // init position
-            toBackward();
-        }
-    }
+
 
     //TODO figure out what 2.731 means
-    public void move(int position) {
-        if (slides.getCurrentPosition() > (2.731 * slides.PULSES_PER_REVOLUTION)) {
-            targetPosition = position;
-        }
-//            if (!isTeleOp) {
-//                while (isBusy()) {
-//                    update();
-//                }
-//            }
-    }
+
     public boolean isBusy() {
         return Math.abs(error) > 10;
     }
