@@ -47,7 +47,7 @@ public class Crossbow implements Component {
 
     public void toggleLauncher(){
         launched = !launched;
-        updatePosLauncher()
+        updatePosLauncher();
     }
 
     public void updatePosLauncher(){
