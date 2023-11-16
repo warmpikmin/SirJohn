@@ -38,11 +38,11 @@ public class Crossbow implements Component {
     //TODO figure out if this value works
     public void FIRE(){
         launched = true;
-        updatePosLauncher()
+        updatePosLauncher();
     }
     public void reset(){
         launched = false;
-        updatePosLauncher()
+        updatePosLauncher();
     }
 
     public void toggleLauncher(){
