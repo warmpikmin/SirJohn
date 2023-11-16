@@ -37,6 +37,10 @@ public class MainOp extends BaseOpMode{
             slowmode = !slowmode;
         };
 
+        gamepadListener2.start.onRelease = () -> {
+            robot.crossbow.toggleLauncher();
+        };
+
         gamepadListener2.a.onPress = () -> {
             robot.intake.toggleClaw();
         };

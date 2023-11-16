@@ -37,12 +37,21 @@ public class Crossbow implements Component {
     //fluently instigating rapid ejection
     //TODO figure out if this value works
     public void FIRE(){
-        launch.setPosition(firePos);
         launched = true;
+        updatePosLauncher()
     }
     public void reset(){
-        launch.setPosition(init);
         launched = false;
+        updatePosLauncher()
+    }
+
+    public void toggleLauncher(){
+        launched = !launched;
+        updatePosLauncher()
+    }
+
+    public void updatePosLauncher(){
+        launch.setPosition(launched ? firePos : init);
     }
 
     @Override
