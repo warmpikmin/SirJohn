@@ -28,7 +28,7 @@ public class Intake implements Component {
     public boolean isClosed;
     public boolean isTeleOp, forcePosition;
     public double error, prevError = 0, time, prevTime = System.nanoTime() * 1e-9d, power;
-    public static double kP = 0.01, kD = 0, kG = 0;
+    public static double kP = 0.005, kD = 0.00001, kG = 0.1;
     public Intake(
             String armName,
             String clawName,
@@ -58,6 +58,7 @@ public class Intake implements Component {
         arm.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
     @Override
@@ -73,7 +74,6 @@ public class Intake implements Component {
 
     }
     public void update(boolean forcePosition){
-        arm.setTargetPosition(targetPosition);
         error = targetPosition - getCurrentPosition();
         time = System.nanoTime() * 1e-9d;
         this.forcePosition = forcePosition;
@@ -113,11 +113,11 @@ public class Intake implements Component {
 
     @Override
     public String getTelemetry() {
-        telemetry.addData("RotationPosition", getCurrentPosition());
-        telemetry.addData("RotationTarget", targetPosition);
-        telemetry.addData("RotationTargetActual", arm.getTargetPosition());
-        telemetry.addData("RotationError", error);
-        telemetry.addData("RotationPower", arm.getPower());
+        telemetry.addData("CurrentPosition", getCurrentPosition());
+        telemetry.addData("TargetPosition", targetPosition);
+        telemetry.addData("arm.getTargetPosition", arm.getTargetPosition());
+        telemetry.addData("error", error);
+        telemetry.addData("power", arm.getPower());
         telemetry.addData("clawIsClosed", isClosed);
         telemetry.addData("Arm position", arm.getCurrentPosition());
         telemetry.addData("Arm zero power behaviour",arm.getZeroPowerBehavior());
@@ -125,11 +125,15 @@ public class Intake implements Component {
     }
 
     public void toggleArm(){
-        if(arm.getTargetPosition() == forward){
+        if(targetPosition == forward){
             arm.setTargetPosition(backward);
+            targetPosition = backward;
+
         }
         else{
             arm.setTargetPosition(forward);
+            targetPosition = forward;
+
         }
     }
 

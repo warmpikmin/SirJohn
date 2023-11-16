@@ -32,8 +32,8 @@ public class SirJohn extends Robot {
     @Override
     protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
         this.isTeleOp = isTeleOp;
-        this.intake = new Intake("arm", "claw", hardwareMap, telemetry, isTeleOp, 0, 0,84,0,1);
-        this.outtake = new Outtake("pins","spin", hardwareMap, telemetry, 0.5, .25,0, 0.5, 0);
+        this.intake = new Intake("arm", "claw", hardwareMap, telemetry, isTeleOp, 0, 5,90,0,1);
+        this.outtake = new Outtake("spin", hardwareMap, telemetry, 0.5, .25);
 //        this.hanger = new Hanger("hanger", hardwareMap, telemetry, isTeleOp, 0,0,0);
         this.crossbow = new Crossbow("crossbow", hardwareMap, telemetry, 0.5, 0);
         this.slides = new Slides("rightArm","leftArm" , hardwareMap, telemetry, isTeleOp, 0, 0, 0,0,0);
