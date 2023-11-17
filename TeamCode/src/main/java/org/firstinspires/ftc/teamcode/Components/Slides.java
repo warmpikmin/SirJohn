@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.Base.Component;
 
 @Config
 public class Slides implements Component {
-    private final DcMotor rightArm;
-    private final DcMotor leftArm;
+    public final DcMotor rightArm;
+    public final DcMotor leftArm;
     public double PULSES_PER_REVOLUTION;
     public int LOWER_BOUND;
     public int UPPER_BOUND;
@@ -48,7 +48,7 @@ public class Slides implements Component {
         rightArm.setDirection(DcMotorSimple.Direction.FORWARD);
         leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        this.PULSES_PER_REVOLUTION = 384.5;
+        this.PULSES_PER_REVOLUTION = 145.1;
         this.LOWER_BOUND = (int) (lowerBound * PULSES_PER_REVOLUTION);
         this.UPPER_BOUND = (int) (upperBound * PULSES_PER_REVOLUTION);
         this.ZERO_POSITION = (int) (zeroPosition * PULSES_PER_REVOLUTION);
@@ -62,11 +62,13 @@ public class Slides implements Component {
 
     @Override
     public void init() {
-        leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        move(isTeleOp ? ZERO_POSITION : LOWER_BOUND);
+        if (!isTeleOp) {
+            leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            move(isTeleOp ? ZERO_POSITION : LOWER_BOUND);
+        }
     }
 
     @Override
@@ -76,7 +78,9 @@ public class Slides implements Component {
     @Override
     public void update() {
         error = targetPosition - getCurrentPosition();
-        setPower(power);
+        if (!isTeleOp) {
+            setPower(power);
+        }
     }
 
     @Override

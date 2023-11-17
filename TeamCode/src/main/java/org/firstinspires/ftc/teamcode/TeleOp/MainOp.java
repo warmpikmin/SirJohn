@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Components.Intake;
 import org.firstinspires.ftc.teamcode.Components.Outtake;
 
 @TeleOp
-public class MainOp extends BaseOpMode{
+public class MainOp extends BaseOpMode {
     public SirJohn robot;
     public double x, y, rot, speed, xModifier, yModifier;
     public boolean slowmode;
@@ -27,10 +27,7 @@ public class MainOp extends BaseOpMode{
     }
     @Override
     public void onInit() throws InterruptedException {
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-
-
+//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
     @Override
     public void onStart() throws InterruptedException {
@@ -100,14 +97,15 @@ public class MainOp extends BaseOpMode{
             x = - 1;
         }
 
-        //.014 is the value from last year's arm movement-- does this need to change?
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
-            if (robot.slides.getCurrentPosition() < robot.slides.LOWER_BOUND) {
-               robot.slides.move(robot.slides.LOWER_BOUND + (int) (robot.slides.PULSES_PER_REVOLUTION * 0.014));
-            } else if (robot.slides.getCurrentPosition() > robot.slides.UPPER_BOUND) {
-                robot.slides.move(robot.slides.UPPER_BOUND - (int) (robot.slides.PULSES_PER_REVOLUTION * 0.014));
+//            if (robot.slides.getCurrentPosition() < robot.slides.LOWER_BOUND) {
+//                // make sure the slides don't go too low
+//            } else
+            if (robot.slides.getCurrentPosition() > robot.slides.UPPER_BOUND) {
+                // make sure the slides don't go too high
             } else {
-                robot.slides.move((int) (((gamepad2.right_trigger - gamepad2.left_trigger) + robot.slides.kG) * robot.slides.PULSES_PER_REVOLUTION * 0.5) + robot.slides.getCurrentPosition());
+                robot.slides.leftArm.setPower(gamepad2.left_trigger - gamepad2.right_trigger + robot.slides.kG);                robot.slides.leftArm.setPower(gamepad2.right_trigger - gamepad2.left_trigger + robot.slides.kG);
+                robot.slides.rightArm.setPower(gamepad2.right_trigger - gamepad2.left_trigger + robot.slides.kG);
             }
         }
 

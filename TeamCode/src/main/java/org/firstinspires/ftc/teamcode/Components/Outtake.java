@@ -31,7 +31,7 @@ public class Outtake implements Component {
     }
     @Override
     public void init() {
-        flip();
+        unFlip();
     }
 
     @Override
