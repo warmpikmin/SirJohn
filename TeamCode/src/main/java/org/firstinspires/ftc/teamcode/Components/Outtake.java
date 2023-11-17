@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 
 public class Outtake implements Component {
-    private Servo spin;
+    public Servo spin;
     //private Servo pins;
     public boolean spinPos;
     //public Pins pinsPos;
@@ -15,9 +15,10 @@ public class Outtake implements Component {
     //public double pinsMid;
     //public double pinsOut;
     public double spun;
+    public double middle;
     public double unSpun;
     Telemetry telemetry;
-    public Outtake(String spinName, HardwareMap hardwareMap, Telemetry telemetry, double spun, double unSpun){
+    public Outtake(String spinName, HardwareMap hardwareMap, Telemetry telemetry, double spun, double unSpun,double middle){
         //pins = hardwareMap.get(Servo.class, pinsName);
         spin = hardwareMap.get(Servo.class, spinName);
         this.telemetry = telemetry;
@@ -26,10 +27,11 @@ public class Outtake implements Component {
         //this.pinsOut = pinsOut;
         this.spun = spun;
         this.unSpun= unSpun;
+        this.middle = middle;
     }
     @Override
     public void init() {
-
+        flip();
     }
 
     @Override
@@ -81,6 +83,9 @@ public class Outtake implements Component {
     public void toggleFlip(){
         spinPos = !spinPos;
         updatePosFlip();
+    }
+    public void toMiddle(){
+        spin.setPosition(middle);
     }
     public void updatePosFlip(){
         spin.setPosition(spinPos ? spun : unSpun);

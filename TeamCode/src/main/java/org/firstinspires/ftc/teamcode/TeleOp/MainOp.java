@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Base.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Bots.SirJohn;
+import org.firstinspires.ftc.teamcode.Components.Intake;
 import org.firstinspires.ftc.teamcode.Components.Outtake;
 
 @TeleOp
@@ -28,6 +29,8 @@ public class MainOp extends BaseOpMode{
     public void onInit() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+
+
     }
     @Override
     public void onStart() throws InterruptedException {
@@ -43,14 +46,21 @@ public class MainOp extends BaseOpMode{
 
         gamepadListener2.a.onRelease = () -> {
             robot.intake.toggleClaw();
+            if(robot.intake.arm.getTargetPosition() == Intake.backward){
+                robot.outtake.toMiddle();
+            }
         };
+
+//        gamepadListener2.y.onRelease = () -> {
+//            robot.outtake.toMiddle();
+//        };
 
         gamepadListener2.b.onRelease = () -> {
             //figure out what to do in the cases of 0 or 1 pixel already on outtake
             //bc that will determine whether pins should open or not before flipping.
 
-            robot.intake.openClaw();
-            robot.outtake.unFlip();
+            robot.intake.toggleArm();
+
         };
 
         gamepadListener2.x.onRelease = () -> {
@@ -66,6 +76,8 @@ public class MainOp extends BaseOpMode{
         gamepadListener2.du.onRelease = () -> {
             robot.slides.toUpperPlace();
         };
+
+
 
     }
 
@@ -95,7 +107,7 @@ public class MainOp extends BaseOpMode{
             } else if (robot.slides.getCurrentPosition() > robot.slides.UPPER_BOUND) {
                 robot.slides.move(robot.slides.UPPER_BOUND - (int) (robot.slides.PULSES_PER_REVOLUTION * 0.014));
             } else {
-                robot.slides.move((int) ((gamepad2.right_trigger - gamepad2.left_trigger) * robot.slides.PULSES_PER_REVOLUTION * 0.5) + robot.slides.getCurrentPosition());
+                robot.slides.move((int) (((gamepad2.right_trigger - gamepad2.left_trigger) + robot.slides.kG) * robot.slides.PULSES_PER_REVOLUTION * 0.5) + robot.slides.getCurrentPosition());
             }
         }
 

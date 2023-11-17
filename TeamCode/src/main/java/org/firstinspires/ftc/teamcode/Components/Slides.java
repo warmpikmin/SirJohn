@@ -25,6 +25,8 @@ public class Slides implements Component {
     public boolean isTeleOp;
 
     public double error, power = 0;
+
+    public double kG;
     Telemetry telemetry;
 
     public Slides(
@@ -37,7 +39,8 @@ public class Slides implements Component {
             double upperBound,
             double zeroPosition,
             double placePosition,
-            double upperPlacePosition
+            double upperPlacePosition,
+            double kG
     ) {
         rightArm = hardwareMap.get(DcMotor.class, rightArmName);
         leftArm = hardwareMap.get(DcMotor.class, leftArmName);
@@ -51,6 +54,7 @@ public class Slides implements Component {
         this.ZERO_POSITION = (int) (zeroPosition * PULSES_PER_REVOLUTION);
         this.PLACE_POSITION = (int) (placePosition * PULSES_PER_REVOLUTION);
         this.UPPER_PLACE_POSITION = (int) (upperPlacePosition * UPPER_PLACE_POSITION);
+        this.kG = kG;
 
         this.isTeleOp = isTeleOp;
         this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

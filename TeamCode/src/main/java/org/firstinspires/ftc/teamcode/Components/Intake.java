@@ -58,8 +58,8 @@ public class Intake implements Component {
         arm.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setTargetPosition(forward);
-        targetPosition = forward;
+        arm.setTargetPosition(backward);
+        targetPosition = backward;
 
 
     }
