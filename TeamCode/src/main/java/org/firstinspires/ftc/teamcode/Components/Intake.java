@@ -25,10 +25,10 @@ public class Intake implements Component {
     public static int forward;
     public static int backward;
     public static int targetPosition = 0;
-    public boolean isClosed;
+    public boolean isClosed = false;
     public boolean isTeleOp, forcePosition;
     public double error, prevError = 0, time, prevTime = System.nanoTime() * 1e-9d, power;
-    public static double kP = 0.005, kD = 0.00001, kG = 0.1;
+    public static double kP = 0.004, kD = 0.00001, kG = 0.08;
     public Intake(
             String armName,
             String clawName,
@@ -58,6 +58,9 @@ public class Intake implements Component {
         arm.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setTargetPosition(forward);
+        targetPosition = forward;
+
 
     }
 

@@ -41,25 +41,29 @@ public class MainOp extends BaseOpMode{
             robot.crossbow.toggleLauncher();
         };
 
-        gamepadListener2.a.onPress = () -> {
+        gamepadListener2.a.onRelease = () -> {
             robot.intake.toggleClaw();
         };
 
-        gamepadListener2.b.onPress = () -> {
+        gamepadListener2.b.onRelease = () -> {
             //figure out what to do in the cases of 0 or 1 pixel already on outtake
             //bc that will determine whether pins should open or not before flipping.
-            robot.outtake.flip();
+
             robot.intake.openClaw();
             robot.outtake.unFlip();
         };
 
-        gamepadListener2.dd.onPress = () -> {
+        gamepadListener2.x.onRelease = () -> {
+            robot.outtake.toggleFlip();
+        };
+
+        gamepadListener2.dd.onRelease = () -> {
             robot.slides.toZero();
         };
-        gamepadListener2.dl.onPress = () -> {
+        gamepadListener2.dl.onRelease = () -> {
             robot.slides.toPlace();
         };
-        gamepadListener2.du.onPress = () -> {
+        gamepadListener2.du.onRelease = () -> {
             robot.slides.toUpperPlace();
         };
 
