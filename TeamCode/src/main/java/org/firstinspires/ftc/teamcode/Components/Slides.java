@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.Components;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -10,10 +7,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 
-@Config
 public class Slides implements Component {
-    public final DcMotor rightArm;
     public final DcMotor leftArm;
+    public final DcMotor rightArm;
+
+
+
     public double PULSES_PER_REVOLUTION;
     public int LOWER_BOUND;
     public int UPPER_BOUND;
@@ -27,27 +26,15 @@ public class Slides implements Component {
     public double error, power = 0;
 
     public double kG;
+
+    public double MotorPower;
+    public int TotalTicks, StartingPosition;
     Telemetry telemetry;
 
-    public Slides(
-            String rightArmName,
-            String leftArmName,
-            HardwareMap hardwareMap,
-            Telemetry telemetry,
-            boolean isTeleOp,
-            double lowerBound,
-            double upperBound,
-            double zeroPosition,
-            double placePosition,
-            double upperPlacePosition,
-            double kG
-    ) {
-        rightArm = hardwareMap.get(DcMotor.class, rightArmName);
-        leftArm = hardwareMap.get(DcMotor.class, leftArmName);
 
-        rightArm.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
-
+    public Slides(String leftName, String rightName, HardwareMap hardwareMap, Telemetry telemetry, boolean isTeleOp,double lowerBound, double upperBound, double zeroPosition, double placePosition, double upperPlacePosition, double kG) {
+        leftArm = hardwareMap.get(DcMotor.class, leftName);
+        rightArm = hardwareMap.get(DcMotor.class,rightName);
         this.PULSES_PER_REVOLUTION = 145.1;
         this.LOWER_BOUND = (int) (lowerBound * PULSES_PER_REVOLUTION);
         this.UPPER_BOUND = (int) (upperBound * PULSES_PER_REVOLUTION);
@@ -55,20 +42,25 @@ public class Slides implements Component {
         this.PLACE_POSITION = (int) (placePosition * PULSES_PER_REVOLUTION);
         this.UPPER_PLACE_POSITION = (int) (upperPlacePosition * UPPER_PLACE_POSITION);
         this.kG = kG;
-
         this.isTeleOp = isTeleOp;
-        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        rightArm.setDirection(DcMotor.Direction.REVERSE);
+        leftArm.setDirection(DcMotor.Direction.FORWARD);
+        this.telemetry = telemetry;
     }
+
+
 
     @Override
     public void init() {
-        if (!isTeleOp) {
-            leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            move(isTeleOp ? ZERO_POSITION : LOWER_BOUND);
-        }
+        leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        move(ZERO_POSITION);
+
+
     }
 
     @Override
@@ -77,48 +69,59 @@ public class Slides implements Component {
 
     @Override
     public void update() {
-        error = targetPosition - getCurrentPosition();
-        if (!isTeleOp) {
-            setPower(power);
+        telemetry.addData("Position", getCurrentPosition());
+        if (isTeleOp) {
+            if (isBusy()) {
+                setPower(MotorPower);
+//                setPower(((-4.0 * MotorPower) / Math.pow(TotalTicks, 2.0)) * Math.pow(TotalTicks / 2.0 - getCurrentPosition(), 2.0) + MotorPower);
+            } else {
+                setPower(0);
+                move(getTargetPosition());
+            }
+        } else {
+            if (getCurrentPosition() != getTargetPosition()) move(getTargetPosition());
         }
     }
 
     @Override
     public String getTelemetry() {
-        telemetry.addData("SlidePosition", getCurrentPosition());
-        telemetry.addData("SlideTarget", targetPosition);
-        telemetry.addData("SlideError", error);
-        telemetry.addData("SlidePower", power);
-        telemetry.addData("Left", leftArm.getCurrentPosition());
-        telemetry.addData("Right", rightArm.getCurrentPosition());
         return null;
     }
 
-    public void toZero() {
-        move(ZERO_POSITION);
-    }
-
-    public void toPlace() {
-        move(PLACE_POSITION);
-    }
-
-    public void toUpperPlace(){move(UPPER_PLACE_POSITION);}
-
     public void move(int position) {
-        targetPosition = position;
+        move(position, 1);
+    }
+
+    public void move(int position, double motorPower) {
+        leftArm.setTargetPosition(position);
+        leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightArm.setTargetPosition(position);
+        rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorPower = motorPower;
+        TotalTicks = position;
+        StartingPosition = getCurrentPosition();
+//        if (!isTeleOp) {
+//            while (isBusy()) {
+//                setPower(MotorPower);
+//            }
+//            setPower(0);
+//        }
     }
 
     public void setPower(double motorPower) {
-        if (motorPower > 1) motorPower = 1;
-        rightArm.setPower(motorPower);
         leftArm.setPower(motorPower);
+        rightArm.setPower(motorPower);
     }
 
     public boolean isBusy() {
-        return Math.abs(error) > 10;
+        return leftArm.isBusy();
     }
 
     public int getCurrentPosition() {
-        return Math.min(leftArm.getCurrentPosition(), rightArm.getCurrentPosition());
+        return leftArm.getCurrentPosition();
+    }
+
+    public int getTargetPosition() {
+        return leftArm.getTargetPosition();
     }
 }

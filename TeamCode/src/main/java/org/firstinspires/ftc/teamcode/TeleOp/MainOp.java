@@ -64,15 +64,7 @@ public class MainOp extends BaseOpMode {
             robot.outtake.toggleFlip();
         };
 
-        gamepadListener2.dd.onRelease = () -> {
-            robot.slides.toZero();
-        };
-        gamepadListener2.dl.onRelease = () -> {
-            robot.slides.toPlace();
-        };
-        gamepadListener2.du.onRelease = () -> {
-            robot.slides.toUpperPlace();
-        };
+
 
 
 
@@ -98,14 +90,12 @@ public class MainOp extends BaseOpMode {
         }
 
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
-//            if (robot.slides.getCurrentPosition() < robot.slides.LOWER_BOUND) {
-//                // make sure the slides don't go too low
-//            } else
-            if (robot.slides.getCurrentPosition() > robot.slides.UPPER_BOUND) {
-                // make sure the slides don't go too high
+            if (robot.slides.getCurrentPosition() < robot.slides.LOWER_BOUND) {
+                robot.slides.move(robot.slides.LOWER_BOUND + 10);
+            } else if (robot.slides.getCurrentPosition() > robot.slides.UPPER_BOUND) {
+                robot.slides.move(robot.slides.UPPER_BOUND - 10);
             } else {
-                robot.slides.leftArm.setPower(gamepad2.left_trigger - gamepad2.right_trigger + robot.slides.kG);                robot.slides.leftArm.setPower(gamepad2.right_trigger - gamepad2.left_trigger + robot.slides.kG);
-                robot.slides.rightArm.setPower(gamepad2.right_trigger - gamepad2.left_trigger + robot.slides.kG);
+                robot.slides.move((int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 100) + robot.slides.getCurrentPosition(), gamepad2.right_trigger - gamepad2.left_trigger);
             }
         }
 
