@@ -23,6 +23,7 @@ public class Intake implements Component {
     public double closed;
     public double open;
     public static int forward;
+    public int autoPos;
     public static int backward;
     public static int targetPosition = 0;
     public boolean isClosed = false;
@@ -39,12 +40,14 @@ public class Intake implements Component {
             int forward,
             int backward,
             double closed,
-            double open
+            double open,
+            int autoPos
     ) {
         this.claw = hardwareMap.get(Servo.class, clawName);
         this.arm = hardwareMap.get(DcMotor.class, armName);
 
         this.telemetry = telemetry;
+        this.autoPos = autoPos;
         this.closed = closed;
         this.open = open;
         Intake.forward = forward;
@@ -104,6 +107,10 @@ public class Intake implements Component {
         isClosed = false;
         updatePos();
     }
+    public void setAutoPos(){
+        arm.setTargetPosition(autoPos);
+        targetPosition=autoPos;
+    }
 
     public void toggleClaw(){
         isClosed = !isClosed;
@@ -139,6 +146,7 @@ public class Intake implements Component {
 
         }
     }
+
 
 
 
