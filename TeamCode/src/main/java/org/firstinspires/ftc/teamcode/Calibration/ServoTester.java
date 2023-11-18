@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 @Config
-@Disabled
+
 public class ServoTester extends LinearOpMode {
-    public static String name;
+    public static String name = "";
     boolean isGrabbing = false, changed = false;
     public static double pos1, pos2;
 
