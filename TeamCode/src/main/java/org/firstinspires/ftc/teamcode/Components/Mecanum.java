@@ -76,6 +76,16 @@ public class Mecanum implements Component {
         brPower = br * multiplier;
     }
 
+    public void fieldCentricDrive(double x, double y, double clockwise, double heading) {
+        final double rotX = (x * Math.cos(-heading) - y * Math.sin(-heading)) * 1.1;
+        final double rotY = x * Math.sin(-heading) + y * Math.cos(-heading);
+        final double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(clockwise), 1);
+        flPower = (rotY + rotX + clockwise) / denominator;
+        blPower = (rotY - rotX + clockwise) / denominator;
+        frPower = (rotY - rotX - clockwise) / denominator;
+        brPower = (rotY + rotX - clockwise) / denominator;
+    }
+
 
     public void drive(double x, double y, double rot){
         final double direction = Math.atan2(y, x);

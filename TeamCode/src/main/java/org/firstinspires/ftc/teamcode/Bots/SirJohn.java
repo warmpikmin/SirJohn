@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.Bots;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Robot;
@@ -24,10 +26,7 @@ public class SirJohn extends Robot {
     public Crossbow crossbow;
 //    public Hanger hanger;
     public Slides slides;
-
-
-
-
+    public IMU imu;
 
     @Override
     protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
@@ -46,6 +45,11 @@ public class SirJohn extends Robot {
             addComponents(mecanum);
         }
         this.camera = new Camera("Webcam 1", hardwareMap, telemetry);
+        this.imu = hardwareMap.get(IMU.class, "imu");
+        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
+
         addComponents(camera, intake, outtake, crossbow, slides);
     }
 }
