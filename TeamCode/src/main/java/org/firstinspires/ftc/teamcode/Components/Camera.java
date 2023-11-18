@@ -166,14 +166,6 @@ public class Camera implements Component {
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
-        telemetry.addData("Position",position);
-        telemetry.addData("centerBluePercent",centerBluePercent);
-        telemetry.addData("centerRedPercent",centerRedPercent);
-        telemetry.addData("rightBluePercent",rightBluePercent);
-        telemetry.addData("rightRedPercent",rightRedPercent);
-        telemetry.addData("leftBluePercent",leftBluePercent);
-        telemetry.addData("leftRedPercent",leftRedPercent);
-        telemetry.addData("isBlue?",isBlue);
 
 
     }
@@ -194,7 +186,6 @@ public class Camera implements Component {
 //    }
     class FirstVisionProcessor implements VisionProcessor {
 
-        //TODO find out rectangle values
         public Rect leftRect = new Rect(70, 470, 200, 200);
         public Rect rightRect = new Rect(1020, 470, 200, 200);
         public Rect centerRect = new Rect(540, 420, 200, 200);
@@ -207,6 +198,14 @@ public class Camera implements Component {
         @Override
         public Object processFrame(Mat frame, long captureTimeNanos) {
             processFrame(frame);
+            telemetry.addData("Position",position);
+            telemetry.addData("centerBluePercent",centerBluePercent);
+            telemetry.addData("centerRedPercent",centerRedPercent);
+            telemetry.addData("rightBluePercent",rightBluePercent);
+            telemetry.addData("rightRedPercent",rightRedPercent);
+            telemetry.addData("leftBluePercent",leftBluePercent);
+            telemetry.addData("leftRedPercent",leftRedPercent);
+            telemetry.addData("isBlue?",isBlue);
             telemetry.addLine("processFrame numero dos is working and in a loop");
             telemetry.update();
             return null;
@@ -248,7 +247,6 @@ public class Camera implements Component {
 
 
         public Mat processFrame(Mat input) {
-            //TODO fix submat
             telemetry.addLine("processFrame numero uno is working in a loop");
 
             if (isInit) {
