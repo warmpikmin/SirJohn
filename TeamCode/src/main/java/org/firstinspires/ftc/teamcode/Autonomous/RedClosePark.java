@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.drive.RRMecanum;
 public class RedClosePark extends BaseOpMode {
     public SirJohn robot;
     public RRMecanum drive;
-    public Trajectory toPark;
+    public Trajectory offWall, toPark;
 
     @Override
     protected Robot setRobot() {
@@ -36,15 +36,23 @@ public class RedClosePark extends BaseOpMode {
     @Override
     public void onInit(){
         drive = new RRMecanum(hardwareMap);
-        toPark = drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(3)
-                .forward(28)
+        offWall = drive.trajectoryBuilder(new Pose2d())
+                .strafeLeft(4)
                 .build();
+        toPark = drive.trajectoryBuilder(new Pose2d())
+                .forward(38)
+                .build();
+        robot.outtake.toMiddle();
     }
     @Override
     public void onStart() throws InterruptedException {
-        drive.followTrajectory(toPark);
-        robot.intake.openClaw();
+        drive.followTrajectory(offWall);
+        drive.waitForIdle();
+        drive.setPoseEstimate(new Pose2d());
+        drive.followTrajectoryAsync(toPark);
+        drive.waitForIdle();
+        drive.setPoseEstimate(new Pose2d());
+        robot.outtake.unFlip();
     }
     @Override
     public void onUpdate(){
