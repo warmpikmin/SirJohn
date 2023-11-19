@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -10,8 +9,6 @@ import org.firstinspires.ftc.teamcode.Base.Component;
 public class Slides implements Component {
     public final DcMotor leftArm;
     public final DcMotor rightArm;
-
-
 
     public double PULSES_PER_REVOLUTION;
     public int LOWER_BOUND;
@@ -46,6 +43,9 @@ public class Slides implements Component {
         rightArm.setDirection(DcMotor.Direction.REVERSE);
         leftArm.setDirection(DcMotor.Direction.FORWARD);
         this.telemetry = telemetry;
+        leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        move(ZERO_POSITION);
     }
 
 
@@ -54,13 +54,8 @@ public class Slides implements Component {
     public void init() {
         leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        move(ZERO_POSITION);
-
-
     }
 
     @Override
