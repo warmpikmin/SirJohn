@@ -51,12 +51,11 @@ public class Camera implements Component {
     public double rightBluePercent;
     public double rightRedPercent;
     private volatile ParkingPosition position = ParkingPosition.RIGHT;
-    private final Scalar BLACK = new Scalar(255,255,255);
     private static Scalar
             lowerRedBounds = new Scalar(175, 0, 0, 255),
             upperRedBounds = new Scalar(255, 175, 175, 255),
-            lowerBlueBounds = new Scalar(0, 0, 175, 255),
-            upperBlueBounds = new Scalar(175, 175, 255, 255);
+            lowerBlueBounds = new Scalar(50, 50, 100, 255),
+            upperBlueBounds = new Scalar(100, 100, 255, 255);
 
 
     boolean isBlue;

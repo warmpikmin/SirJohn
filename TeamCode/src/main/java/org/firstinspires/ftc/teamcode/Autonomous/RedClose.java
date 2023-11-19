@@ -114,7 +114,7 @@ public class RedClose extends BaseOpMode {
             drive.setPoseEstimate(new Pose2d());
             drive.followTrajectory(leftMiddle);
 //            sleep(1000);
-            robot.slides.move(90,1);
+            robot.slides.move(85,1);
             sleep(2000);
             robot.outtake.unFlip();
             drive.waitForIdle();
@@ -133,7 +133,7 @@ public class RedClose extends BaseOpMode {
             robot.intake.toggleClaw();
             drive.setPoseEstimate(new Pose2d());
             drive.followTrajectory(centerMiddle);
-            robot.slides.move(90,1);
+            robot.slides.move(85,1);
             sleep(2000);
             robot.outtake.unFlip();
             drive.waitForIdle();
@@ -148,7 +148,7 @@ public class RedClose extends BaseOpMode {
             robot.intake.toggleClaw();
             drive.setPoseEstimate(new Pose2d());
             drive.followTrajectory(rightMiddle);
-            robot.slides.move(90,1);
+            robot.slides.move(85,1);
             sleep(2000);
             robot.outtake.unFlip();
             drive.waitForIdle();
