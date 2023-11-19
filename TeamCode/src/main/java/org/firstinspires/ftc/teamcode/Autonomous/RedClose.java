@@ -4,6 +4,9 @@ import static org.firstinspires.ftc.teamcode.Components.Camera.ParkingPosition.C
 import static org.firstinspires.ftc.teamcode.Components.Camera.ParkingPosition.LEFT;
 import static org.firstinspires.ftc.teamcode.Components.Camera.ParkingPosition.RIGHT;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -20,6 +23,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.RRMecanum;
 
 @Autonomous
+@Config
 public class RedClose extends BaseOpMode {
     public SirJohn robot;
     public RRMecanum drive;
@@ -29,6 +33,9 @@ public class RedClose extends BaseOpMode {
     public Trajectory toCenter;
     public Trajectory extraForward;
     public Trajectory rightInitial;
+    public Trajectory leftMiddle;
+    public Trajectory centerMiddle;
+    public Trajectory rightMiddle;
 
     @Override
     protected Robot setRobot() {
@@ -64,43 +71,94 @@ public class RedClose extends BaseOpMode {
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         rightInitial = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(28,-29), Math.toRadians(0),RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineTo(new Vector2d(28,-31), Math.toRadians(0),RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .build();
+        leftMiddle = drive.trajectoryBuilder(new Pose2d())
+                .forward(43, RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(44,6),Math.toRadians(0))
+                .build();
+        centerMiddle = drive.trajectoryBuilder(new Pose2d())
+                .forward(26, RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(28.1,-13),Math.toRadians(0))
+                .build();
+        rightMiddle = drive.trajectoryBuilder(new Pose2d())
+                .forward(18,RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(20,-15),Math.toRadians(0))
                 .build();
 
 
         robot.camera.init();
         robot.intake.setAutoPos();
 
-
-
+        telemetry = new MultipleTelemetry(
+                telemetry,
+                FtcDashboard.getInstance().getTelemetry()
+        );
     }
     @Override
     public void onStart() throws InterruptedException {
         robot.camera.isInit = false;
         position = robot.camera.getPosition();
+        robot.intake.setAutoPos();
+        drive.waitForIdle();
+        sleep(1000);
 
 
         if(position ==LEFT) {
             drive.followTrajectoryAsync(forward);
+            drive.waitForIdle();
+            drive.turnAsync(Math.toRadians(-100));
+            drive.waitForIdle();
+            robot.intake.toggleClaw();
+            drive.setPoseEstimate(new Pose2d());
+            drive.followTrajectory(leftMiddle);
+//            sleep(1000);
+            robot.slides.move(90,1);
+            sleep(2000);
+            robot.outtake.unFlip();
+            drive.waitForIdle();
+
+
+
         }
-        drive.waitForIdle();
-        sleep(1000);
+
 
         if(position == CENTER){
             drive.waitForIdle();
             drive.followTrajectoryAsync(extraForward);
+            drive.waitForIdle();
+            drive.turnAsync(Math.toRadians(-100));
+            drive.waitForIdle();
+            robot.intake.toggleClaw();
+            drive.setPoseEstimate(new Pose2d());
+            drive.followTrajectory(centerMiddle);
+            robot.slides.move(90,1);
+            sleep(2000);
+            robot.outtake.unFlip();
+            drive.waitForIdle();
+
         }
         if(position == RIGHT){
             drive.waitForIdle();
             drive.followTrajectoryAsync(rightInitial);
-        }
-        drive.waitForIdle();
-        drive.turnAsync(Math.toRadians(-93));
+            drive.waitForIdle();
+            drive.turnAsync(Math.toRadians(-100));
+            drive.waitForIdle();
+            robot.intake.toggleClaw();
+            drive.setPoseEstimate(new Pose2d());
+            drive.followTrajectory(rightMiddle);
+            robot.slides.move(90,1);
+            sleep(2000);
+            robot.outtake.unFlip();
+            drive.waitForIdle();
 
-        drive.waitForIdle();
+        }
         robot.intake.setAutoPos();
-        robot.intake.toggleClaw();
+
+
+
+
 
 
     }

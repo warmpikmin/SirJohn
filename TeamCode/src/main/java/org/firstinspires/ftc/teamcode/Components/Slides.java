@@ -70,7 +70,7 @@ public class Slides implements Component {
     @Override
     public void update() {
         telemetry.addData("Position", getCurrentPosition());
-        if (isTeleOp) {
+        //if (isTeleOp) {
             if (isBusy()) {
                 setPower(MotorPower);
 //                setPower(((-4.0 * MotorPower) / Math.pow(TotalTicks, 2.0)) * Math.pow(TotalTicks / 2.0 - getCurrentPosition(), 2.0) + MotorPower);
@@ -78,9 +78,9 @@ public class Slides implements Component {
                 setPower(0);
                 move(getTargetPosition());
             }
-        } else {
-            if (getCurrentPosition() != getTargetPosition()) move(getTargetPosition());
-        }
+        //} else {
+            //if (getCurrentPosition() != getTargetPosition()) move(getTargetPosition());
+        //}
     }
 
     @Override

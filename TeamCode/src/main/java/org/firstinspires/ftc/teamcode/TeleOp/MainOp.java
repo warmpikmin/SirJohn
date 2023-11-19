@@ -32,12 +32,13 @@ public class MainOp extends BaseOpMode {
     @Override
     public void onInit() throws InterruptedException {
 //        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        robot.crossbow.toggleLauncher();
+
     }
 
     @Override
     public void onStart() throws InterruptedException {
         robot.camera.isInit = false;
+        robot.crossbow.toggleLauncher();
 
         gamepadListener1.start.onRelease = () -> {
             slowmode = !slowmode;
@@ -65,7 +66,6 @@ public class MainOp extends BaseOpMode {
         gamepadListener2.x.onRelease = () -> {
             robot.outtake.toggleFlip();
         };
-
 
     }
 

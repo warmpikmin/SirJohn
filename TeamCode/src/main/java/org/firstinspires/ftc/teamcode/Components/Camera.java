@@ -59,10 +59,6 @@ public class Camera implements Component {
             upperBlueBounds = new Scalar(175, 175, 255, 255);
 
 
-    public Rect rectLeft = new Rect(110, 42, 40, 40);
-    public Rect rectMiddle = new Rect(160, 42, 40, 40);
-    public Rect rectRight = new Rect(210, 42, 40, 40);
-    public Rect rect = new Rect(20, 20, 50, 50);
     boolean isBlue;
     public boolean isInit;
 
@@ -255,9 +251,17 @@ public class Camera implements Component {
                 Imgproc.blur(input, centerBlurredMat, new Size(5, 5));
                 Imgproc.blur(input, rightBlurredMat, new Size(5, 5));
 
-                leftBlurredMat = leftBlurredMat.submat(leftRect);
-                rightBlurredMat = rightBlurredMat.submat(rightRect);
-                centerBlurredMat = centerBlurredMat.submat(centerRect);
+                Mat tempLeft = leftBlurredMat;
+                Mat tempRight = rightBlurredMat;
+                Mat tempCenter = centerBlurredMat;
+
+                leftBlurredMat = tempLeft.submat(leftRect);
+                rightBlurredMat = tempRight.submat(rightRect);
+                centerBlurredMat = tempCenter.submat(centerRect);
+
+                tempLeft.release();
+                tempCenter.release();
+                tempRight.release();
 
 
                 Core.inRange(rightBlurredMat, lowerBlueBounds, upperBlueBounds, rightBlueMat);
@@ -310,7 +314,7 @@ public class Camera implements Component {
                 centerRedMat.release();
                 leftBlurredMat.release();
                 centerBlurredMat.release();
-                rightRedMat.release();
+                rightBlurredMat.release();
 
                 telemetry.update();
 
