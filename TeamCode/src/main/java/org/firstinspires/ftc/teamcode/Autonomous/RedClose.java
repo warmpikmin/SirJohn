@@ -76,15 +76,15 @@ public class RedClose extends BaseOpMode {
                 .build();
         leftMiddle = drive.trajectoryBuilder(new Pose2d())
                 .forward(43, RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(44,6),Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(44,0),Math.toRadians(0))
                 .build();
         centerMiddle = drive.trajectoryBuilder(new Pose2d())
                 .forward(26, RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(28.1,-13),Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(28.1,-7),Math.toRadians(0))
                 .build();
         rightMiddle = drive.trajectoryBuilder(new Pose2d())
                 .forward(18,RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(20,-15),Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(20,-8),Math.toRadians(0))
                 .build();
 
 

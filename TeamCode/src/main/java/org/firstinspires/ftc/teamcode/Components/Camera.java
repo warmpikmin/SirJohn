@@ -201,7 +201,7 @@ public class Camera implements Component {
             telemetry.addData("leftBluePercent",leftBluePercent);
             telemetry.addData("leftRedPercent",leftRedPercent);
             telemetry.addData("isBlue?",isBlue);
-            telemetry.addLine("processFrame numero dos is working and in a loop");
+//            telemetry.addLine("processFrame numero dos is working and in a loop");
             telemetry.update();
             return null;
 
@@ -242,7 +242,7 @@ public class Camera implements Component {
 
 
         public Mat processFrame(Mat input) {
-            telemetry.addLine("processFrame numero uno is working in a loop");
+//            telemetry.addLine("processFrame numero uno is working in a loop");
 
             if (isInit) {
 
