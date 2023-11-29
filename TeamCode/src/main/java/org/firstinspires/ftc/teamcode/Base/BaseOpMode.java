@@ -17,6 +17,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = setRobot();
         isTeleOp = setTeleOp();
+        String possibleTelemetry;
 
         try {
             robot.mapHardware(hardwareMap, telemetry, this, isTeleOp);
@@ -37,6 +38,12 @@ public abstract class BaseOpMode extends LinearOpMode {
             gamepadListener2.update(gamepad2);
             onUpdate();
             robot.components.forEach(Component::update);
+            for (Component component : robot.components) {
+                possibleTelemetry = component.getTelemetry();
+                if (possibleTelemetry != null) {
+                    telemetry.addLine(possibleTelemetry);
+                }
+            }
         }
     }
 

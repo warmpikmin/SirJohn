@@ -109,7 +109,7 @@ public class Intake implements Component {
     }
     public void setAutoPos(){
         arm.setTargetPosition(autoPos);
-        targetPosition=autoPos;
+        targetPosition = autoPos;
     }
 
     public void toggleClaw(){
@@ -123,31 +123,30 @@ public class Intake implements Component {
 
     public void setArmPos(int pos){
         arm.setTargetPosition(pos);
+        targetPosition = pos;
     }
 
     @Override
     public String getTelemetry() {
-        telemetry.addData("CurrentPosition", getCurrentPosition());
-        telemetry.addData("TargetPosition", targetPosition);
-        telemetry.addData("arm.getTargetPosition", arm.getTargetPosition());
-        telemetry.addData("error", error);
-        telemetry.addData("power", arm.getPower());
-        telemetry.addData("clawIsClosed", isClosed);
-        telemetry.addData("Arm position", arm.getCurrentPosition());
-        telemetry.addData("Arm zero power behaviour",arm.getZeroPowerBehavior());
-        return null;
+        return
+            "CurrentPosition: " + getCurrentPosition() + "\n" +
+            "TargetPosition: " + targetPosition + "\n" +
+            "arm.getTargetPosition: " + arm.getTargetPosition() + "\n" +
+            "error: " + error + "\n" +
+            "power: " + arm.getPower() + "\n" +
+            "clawIsClosed: " + isClosed + "\n" +
+            "Arm position: " + arm.getCurrentPosition() + "\n" +
+            "Arm zero power behavior: " + arm.getZeroPowerBehavior();
     }
 
     public void toggleArm(){
         if(targetPosition == forward){
             arm.setTargetPosition(backward);
             targetPosition = backward;
-
         }
         else{
             arm.setTargetPosition(forward);
             targetPosition = forward;
-
         }
     }
 
@@ -157,7 +156,6 @@ public class Intake implements Component {
     public void toBackwardForce() {
         update(true);
     }
-
 
     //TODO figure out what 2.731 means
 

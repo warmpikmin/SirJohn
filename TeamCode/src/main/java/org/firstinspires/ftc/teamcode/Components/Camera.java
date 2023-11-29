@@ -121,18 +121,12 @@ public class Camera implements Component {
     }
 
     @Override
-    public void update() {
-        telemetryAprilTag();
-
-
-
-        // Push telemetry to the Driver Station.
-        telemetry.update();
-    }
+    public void update() {}
 
     @Override
     public String getTelemetry() {
-        return null;
+//        telemetryAprilTag();
+        return visionProcessor.getTelemetry();
     }
     public void setIsBlue(boolean isBlue){
         this.isBlue = isBlue;
@@ -193,18 +187,19 @@ public class Camera implements Component {
         @Override
         public Object processFrame(Mat frame, long captureTimeNanos) {
             processFrame(frame);
-            telemetry.addData("Position",position);
-            telemetry.addData("centerBluePercent",centerBluePercent);
-            telemetry.addData("centerRedPercent",centerRedPercent);
-            telemetry.addData("rightBluePercent",rightBluePercent);
-            telemetry.addData("rightRedPercent",rightRedPercent);
-            telemetry.addData("leftBluePercent",leftBluePercent);
-            telemetry.addData("leftRedPercent",leftRedPercent);
-            telemetry.addData("isBlue?",isBlue);
-//            telemetry.addLine("processFrame numero dos is working and in a loop");
-            telemetry.update();
             return null;
 
+        }
+        public String getTelemetry() {
+            return
+                "Position: " + position + "\n" +
+                "centerBluePercent: " + centerBluePercent + "\n" +
+                "centerRedPercent: " + centerRedPercent + "\n" +
+                "rightBluePercent: " + rightBluePercent + "\n" +
+                "rightRedPercent: " + rightRedPercent + "\n" +
+                "leftBluePercent: " + leftBluePercent + "\n" +
+                "leftRedPercent: " + leftRedPercent + "\n" +
+                "isBlue: ?" + isBlue;
         }
 
         private android.graphics.Rect makeGraphicsRect(Rect rect, float scaleBmpPxToCanvasPx) {

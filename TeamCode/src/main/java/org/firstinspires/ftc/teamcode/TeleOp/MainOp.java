@@ -91,12 +91,13 @@ public class MainOp extends BaseOpMode {
         }
 
         if(gamepad2.left_stick_y != 0){
-            if(robot.intake.getCurrentPosition() > Intake.forward){
-                robot.intake.setArmPos(Intake.forward - 10);
-            } else if(robot.intake.getCurrentPosition() < Intake.backward){
-                robot.intake.setArmPos(Intake.backward + 10);
+//            robot.intake.setPower(-gamepad2.left_stick_y * 0.5);
+            if(robot.intake.getCurrentPosition() < Intake.forward){
+                robot.intake.setArmPos(Intake.forward + 10);
+            } else if(robot.intake.getCurrentPosition() > Intake.backward){
+                robot.intake.setArmPos(Intake.backward - 10);
             } else{
-                robot.intake.setArmPos((int)(((gamepad2.left_stick_y * 100)  + robot.intake.getCurrentPosition()) * 0.1));
+                robot.intake.setArmPos((int)((-gamepad2.left_stick_y * 1000) + robot.intake.getCurrentPosition()));
             }
         }
 

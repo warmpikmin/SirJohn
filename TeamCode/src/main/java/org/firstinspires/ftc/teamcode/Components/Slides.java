@@ -64,7 +64,7 @@ public class Slides implements Component {
 
     @Override
     public void update() {
-        telemetry.addData("Position", getCurrentPosition());
+//        telemetry.addData("Position", getCurrentPosition());
         //if (isTeleOp) {
             if (isBusy()) {
                 setPower(MotorPower);
