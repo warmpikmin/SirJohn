@@ -97,7 +97,7 @@ public class MainOp extends BaseOpMode {
             } else if(robot.intake.getCurrentPosition() > Intake.backward){
                 robot.intake.setArmPos(Intake.backward - 10);
             } else{
-                robot.intake.setArmPos((int)((-gamepad2.left_stick_y * 1000) + robot.intake.getCurrentPosition()));
+                robot.intake.setArmPos((int)((-gamepad2.left_stick_y * 20) + robot.intake.getCurrentPosition()));
             }
         }
 
