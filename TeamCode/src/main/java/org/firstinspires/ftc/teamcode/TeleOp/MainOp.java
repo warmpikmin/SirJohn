@@ -90,6 +90,16 @@ public class MainOp extends BaseOpMode {
             x = -1;
         }
 
+        if(gamepad2.left_stick_y != 0){
+            if(robot.intake.getCurrentPosition() > Intake.forward){
+                robot.intake.setArmPos(Intake.forward - 10);
+            } else if(robot.intake.getCurrentPosition() < Intake.backward){
+                robot.intake.setArmPos(Intake.backward + 10);
+            } else{
+                robot.intake.setArmPos((int)(((gamepad2.left_stick_y * 100)  + robot.intake.getCurrentPosition()) * 0.1));
+            }
+        }
+
         if (gamepad2.guide) {
             robot.slides.init();
         }
@@ -104,6 +114,8 @@ public class MainOp extends BaseOpMode {
                 robot.slides.move((int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 100) + robot.slides.getCurrentPosition(), gamepad2.right_trigger - gamepad2.left_trigger);
             }
         }
+
+
 
         telemetry.update();
     }

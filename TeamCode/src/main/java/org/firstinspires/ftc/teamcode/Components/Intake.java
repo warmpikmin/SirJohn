@@ -121,6 +121,10 @@ public class Intake implements Component {
         claw.setPosition(isClosed ? closed : open);
     }
 
+    public void setArmPos(int pos){
+        arm.setTargetPosition(pos);
+    }
+
     @Override
     public String getTelemetry() {
         telemetry.addData("CurrentPosition", getCurrentPosition());
