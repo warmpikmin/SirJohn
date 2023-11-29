@@ -106,11 +106,10 @@ public class MainOp extends BaseOpMode {
         }
 
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
-//            if (robot.slides.getCurrentPosition() < robot.slides.LOWER_BOUND) {
-//                robot.slides.move(robot.slides.LOWER_BOUND + 10);
-//            } else
-            if (robot.slides.getCurrentPosition() > robot.slides.UPPER_BOUND) {
-                robot.slides.move(robot.slides.UPPER_BOUND - 10);
+            if (robot.slides.getCurrentPosition() < robot.slides.LOWER_BOUND) {
+                robot.slides.move(robot.slides.LOWER_BOUND + 5);
+            } else if (robot.slides.getCurrentPosition() > robot.slides.UPPER_BOUND) {
+                robot.slides.move(robot.slides.UPPER_BOUND - 5);
             } else {
                 robot.slides.move((int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 100) + robot.slides.getCurrentPosition(), gamepad2.right_trigger - gamepad2.left_trigger);
             }

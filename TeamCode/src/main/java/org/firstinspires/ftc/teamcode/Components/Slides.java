@@ -32,7 +32,7 @@ public class Slides implements Component {
     public Slides(String leftName, String rightName, HardwareMap hardwareMap, Telemetry telemetry, boolean isTeleOp,double lowerBound, double upperBound, double zeroPosition, double placePosition, double upperPlacePosition, double kG) {
         leftArm = hardwareMap.get(DcMotor.class, leftName);
         rightArm = hardwareMap.get(DcMotor.class,rightName);
-        this.PULSES_PER_REVOLUTION = 145.1;
+        this.PULSES_PER_REVOLUTION = 384.5;
         this.LOWER_BOUND = (int) (lowerBound * PULSES_PER_REVOLUTION);
         this.UPPER_BOUND = (int) (upperBound * PULSES_PER_REVOLUTION);
         this.ZERO_POSITION = (int) (zeroPosition * PULSES_PER_REVOLUTION);
