@@ -16,7 +16,7 @@ public class ArmTuner extends LinearOpMode {
     public GamepadListener gamepadListener = new GamepadListener();
     @Override
     public void runOpMode() throws InterruptedException {
-        intake = new Intake("arm","claw", hardwareMap,telemetry, true,2,2,120,0.95,0.655,-50);
+        intake = new Intake("arm","claw", hardwareMap,telemetry, true,2,0,153,0.95,0.655,-50,0.85);
         intake.init();
         waitForStart();
         intake.start();

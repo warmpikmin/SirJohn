@@ -40,7 +40,7 @@ public class Camera implements Component {
     private final Telemetry telemetry;
     private VisionPortal visionPortal;
     private FirstVisionProcessor visionProcessor;
-    private AprilTagProcessor aprilTag;
+    public AprilTagProcessor aprilTag;
     public String deviceName;
     public HardwareMap hardwareMap;
     public boolean isRunning = false;

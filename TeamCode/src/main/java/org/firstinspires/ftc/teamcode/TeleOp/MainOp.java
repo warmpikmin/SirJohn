@@ -35,6 +35,7 @@ public class MainOp extends BaseOpMode {
 
 
 
+
     }
 
     @Override
@@ -55,6 +56,7 @@ public class MainOp extends BaseOpMode {
             robot.intake.toggleClaw();
             if (robot.intake.arm.getTargetPosition() == Intake.backward) {
                 robot.outtake.toMiddle();
+                robot.intake.clawToMiddle();
             }
         };
 
@@ -70,6 +72,7 @@ public class MainOp extends BaseOpMode {
         gamepadListener2.x.onRelease = () -> {
             robot.outtake.toggleFlip();
         };
+        robot.intake.openClaw();
 
     }
 
@@ -92,17 +95,19 @@ public class MainOp extends BaseOpMode {
             x = -1;
         }
 
-        if(gamepad2.left_stick_y != 0){
-//            robot.intake.setPower(-gamepad2.left_stick_y * 0.5);
-            if(robot.intake.getCurrentPosition() < Intake.forward){
-                robot.intake.setArmPos(Intake.forward + 10);
-            } else if(robot.intake.getCurrentPosition() > Intake.backward){
-                robot.intake.setArmPos(Intake.backward - 10);
-            } else{
-                robot.intake.setArmPos((int)((-gamepad2.left_stick_y * 20) + robot.intake.getCurrentPosition()));
-            }
+//        if(gamepad2.left_stick_y != 0){
+////            robot.intake.setPower(-gamepad2.left_stick_y * 0.5);
+//            if(robot.intake.getCurrentPosition() < Intake.forward){
+//                robot.intake.setArmPos(Intake.forward + 10);
+//            } else if(robot.intake.getCurrentPosition() > Intake.backward){
+//                robot.intake.setArmPos(Intake.backward - 10);
+//            } else{
+//                robot.intake.setArmPos((int)((-gamepad2.left_stick_y * 20) + robot.intake.getCurrentPosition()));
+//            }
+//        }
+        if(gamepad2.left_stick_y != 0) {
+            robot.intake.setArmPos((int) ((-gamepad2.left_stick_y * 50) + robot.intake.getCurrentPosition()));
         }
-
         if (gamepad2.guide) {
             robot.slides.init();
         }

@@ -21,6 +21,7 @@ public class Intake implements Component {
     public int FORWARD;
 
     public double closed;
+    public double midClawPos;
     public double open;
     public static int forward;
     public int autoPos;
@@ -29,7 +30,7 @@ public class Intake implements Component {
     public boolean isClosed = false;
     public boolean isTeleOp, forcePosition;
     public double error, prevError = 0, time, prevTime = System.nanoTime() * 1e-9d, power;
-    public static double kP = 0.006, kD = 0.00001, kG = 0.08;
+    public static double kP = 0.004, kD = 0.00001, kG = 0.08;
     public Intake(
             String armName,
             String clawName,
@@ -41,7 +42,8 @@ public class Intake implements Component {
             int backward,
             double closed,
             double open,
-            int autoPos
+            int autoPos,
+            double midClawPos
     ) {
         this.claw = hardwareMap.get(Servo.class, clawName);
         this.arm = hardwareMap.get(DcMotor.class, armName);
@@ -49,6 +51,7 @@ public class Intake implements Component {
         this.telemetry = telemetry;
         this.autoPos = autoPos;
         this.closed = closed;
+        this.midClawPos = midClawPos;
         this.open = open;
         Intake.forward = forward;
         Intake.backward = backward;
@@ -110,6 +113,9 @@ public class Intake implements Component {
     public void setAutoPos(){
         arm.setTargetPosition(autoPos);
         targetPosition = autoPos;
+    }
+    public void clawToMiddle(){
+        claw.setPosition(midClawPos);
     }
 
     public void toggleClaw(){
