@@ -41,7 +41,7 @@ public class SirJohn extends Robot {
             this.mecanum.fl.setDirection(DcMotorSimple.Direction.FORWARD);
             this.mecanum.fr.setDirection(DcMotorSimple.Direction.REVERSE);
             this.mecanum.bl.setDirection(DcMotorSimple.Direction.REVERSE);
-            this.mecanum.br.setDirection(DcMotorSimple.Direction.FORWARD);
+            this.mecanum.br.setDirection(DcMotorSimple.Direction.REVERSE);
             addComponents(mecanum);
         }
         this.camera = new Camera("Webcam 1", hardwareMap, telemetry);
