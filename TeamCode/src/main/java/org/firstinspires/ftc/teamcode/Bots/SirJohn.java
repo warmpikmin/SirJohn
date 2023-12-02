@@ -24,16 +24,16 @@ public class SirJohn extends Robot {
     public Outtake outtake;
     public Mecanum mecanum;
     public Crossbow crossbow;
-//    public Hanger hanger;
+    public Hanger hanger;
     public Slides slides;
     public IMU imu;
 
     @Override
     protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
         this.isTeleOp = isTeleOp;
-        this.intake = new Intake("arm", "claw", hardwareMap, telemetry, isTeleOp, 3, 3,120,0.95,0.655,-50);
+        this.intake = new Intake("arm", "claw", hardwareMap, telemetry, isTeleOp, 3, 3,120,0.95,0.66,-50);
         this.outtake = new Outtake("spin", hardwareMap, telemetry, 0, 0.8,0.07);
-//        this.hanger = new Hanger("hanger", hardwareMap, telemetry, isTeleOp, 0,0,0);
+        this.hanger = new Hanger("hanger", hardwareMap, telemetry, isTeleOp, 0,0,0);
         this.crossbow = new Crossbow("crossbow", hardwareMap, telemetry, 0.7, 1);
         this.slides = new Slides("rightArm","leftArm" , hardwareMap, telemetry, isTeleOp, 0, 2240, 0,90,800, 0.2);
         if(isTeleOp) {
@@ -50,6 +50,6 @@ public class SirJohn extends Robot {
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
 
-        addComponents(camera, intake, outtake, crossbow, slides);
+        addComponents(camera, intake, outtake, crossbow, slides, hanger);
     }
 }

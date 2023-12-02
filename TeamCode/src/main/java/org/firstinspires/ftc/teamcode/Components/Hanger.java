@@ -48,6 +48,7 @@ public class Hanger implements Component{
     public void init() {
         rotation.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rotation.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rotation.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override

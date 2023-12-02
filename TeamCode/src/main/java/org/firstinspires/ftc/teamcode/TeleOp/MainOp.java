@@ -34,6 +34,7 @@ public class MainOp extends BaseOpMode {
 //        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 
+
     }
 
     @Override
@@ -64,6 +65,7 @@ public class MainOp extends BaseOpMode {
             robot.intake.toggleArm();
 
         };
+
 
         gamepadListener2.x.onRelease = () -> {
             robot.outtake.toggleFlip();
@@ -114,6 +116,7 @@ public class MainOp extends BaseOpMode {
                 robot.slides.move((int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 100) + robot.slides.getCurrentPosition(), gamepad2.right_trigger - gamepad2.left_trigger);
             }
         }
+        robot.hanger.setPower(gamepad2.right_stick_y);
 
 
 

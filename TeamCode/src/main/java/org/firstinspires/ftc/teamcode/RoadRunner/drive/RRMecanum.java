@@ -223,6 +223,9 @@ public class RRMecanum extends MecanumDrive {
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
+    public void breakFollowing() {
+        trajectorySequenceRunner.breakFollowing();
+    }
 
     public void waitForIdle() {
         while (!Thread.currentThread().isInterrupted() && isBusy())
