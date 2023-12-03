@@ -87,7 +87,7 @@ public class PIDCalibration extends BaseOpMode {
 
         driveBot = new Robot() {
             @Override
-            protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetryy, LinearOpMode opMode, boolean isTeleOp) {
+            protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetryy, BaseOpMode opMode, boolean isTeleOp) {
                 drivetrain = new Mecanum(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight",telemetryy);
                 drivetrain.fl.setDirection(DcMotorSimple.Direction.REVERSE);
                 drivetrain.fr.setDirection(DcMotorSimple.Direction.FORWARD);

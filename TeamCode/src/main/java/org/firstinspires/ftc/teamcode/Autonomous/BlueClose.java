@@ -1,21 +1,15 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import static org.firstinspires.ftc.teamcode.Components.Camera.ParkingPosition.CENTER;
-import static org.firstinspires.ftc.teamcode.Components.Camera.ParkingPosition.LEFT;
-import static org.firstinspires.ftc.teamcode.Components.Camera.ParkingPosition.RIGHT;
+import org.firstinspires.ftc.teamcode.VisionProcessors.*;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Bots.SirJohn;
-import org.firstinspires.ftc.teamcode.Components.Camera;
-import org.firstinspires.ftc.teamcode.Components.Outtake;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.RRMecanum;
 
@@ -23,7 +17,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.drive.RRMecanum;
 public class BlueClose extends BaseOpMode {
     public SirJohn robot;
     public RRMecanum drive;
-    public Camera.ParkingPosition position = CENTER;
+    public TeamPropDetection.ParkingPosition position = TeamPropDetection.ParkingPosition.CENTER;
 
     public Trajectory forward;
     public Trajectory toCenter;
@@ -46,7 +40,6 @@ public class BlueClose extends BaseOpMode {
 
     @Override
     public void onInit(){
-        robot.camera.isInit = true;
         robot.intake.openClaw();
         drive = new RRMecanum(hardwareMap);
         Pose2d startPose = new Pose2d();
@@ -92,14 +85,13 @@ public class BlueClose extends BaseOpMode {
     }
     @Override
     public void onStart() throws InterruptedException {
-        robot.camera.isInit = false;
         position = robot.camera.getPosition();
         robot.intake.setAutoPos();
         drive.waitForIdle();
         sleep(1000);
 
 
-        if(position ==LEFT) {
+        if(position == TeamPropDetection.ParkingPosition.LEFT) {
             drive.waitForIdle();
             drive.followTrajectoryAsync(leftInitial);
             drive.waitForIdle();
@@ -115,7 +107,7 @@ public class BlueClose extends BaseOpMode {
         }
 
 
-        if(position == CENTER){
+        if(position == TeamPropDetection.ParkingPosition.CENTER){
             drive.waitForIdle();
             drive.followTrajectoryAsync(extraForward);
             drive.waitForIdle();
@@ -129,7 +121,7 @@ public class BlueClose extends BaseOpMode {
             robot.outtake.unFlip();
             drive.waitForIdle();
         }
-        if(position == RIGHT){
+        if(position == TeamPropDetection.ParkingPosition.RIGHT){
             drive.followTrajectoryAsync(forward);
             drive.waitForIdle();
             drive.turnAsync(Math.toRadians(80));

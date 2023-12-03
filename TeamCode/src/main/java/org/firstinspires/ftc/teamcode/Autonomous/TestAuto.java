@@ -39,7 +39,6 @@ public class TestAuto extends BaseOpMode {
     @Override
     public void onInit(){
         FtcDashboard.getInstance().startCameraStream(robot.camera.streamSource, 0);
-        robot.camera.isInit = true;
         drive = new RRMecanum(hardwareMap);
         Pose2d startPose = new Pose2d();
         drive.setPoseEstimate(startPose);
@@ -60,7 +59,6 @@ public class TestAuto extends BaseOpMode {
     }
     @Override
     public void onStart() throws InterruptedException{
-        robot.camera.isInit = false;
         robot.outtake.toMiddle();
         drive.waitForIdle();
         drive.followTrajectoryAsync(tester);

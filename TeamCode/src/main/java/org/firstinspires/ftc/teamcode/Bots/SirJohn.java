@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Base.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Components.Camera;
 import org.firstinspires.ftc.teamcode.Components.Crossbow;
@@ -29,7 +30,7 @@ public class SirJohn extends Robot {
     public IMU imu;
 
     @Override
-    protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
+    protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, BaseOpMode opMode, boolean isTeleOp) {
         this.isTeleOp = isTeleOp;
         this.intake = new Intake("arm", "claw", hardwareMap, telemetry, isTeleOp, 3, 0,153,0.95,0.67,-50, 0.85);
         this.outtake = new Outtake("spin", hardwareMap, telemetry, 0, 0.8,0.07);
@@ -44,7 +45,7 @@ public class SirJohn extends Robot {
             this.mecanum.br.setDirection(DcMotorSimple.Direction.REVERSE);
             addComponents(mecanum);
         }
-        this.camera = new Camera("Webcam 1", hardwareMap, telemetry);
+        this.camera = new Camera("Webcam 1", opMode, hardwareMap, telemetry);
         this.imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,

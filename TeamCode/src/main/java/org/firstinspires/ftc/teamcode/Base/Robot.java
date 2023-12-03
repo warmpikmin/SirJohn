@@ -16,5 +16,5 @@ public abstract class Robot {
         this.components.addAll(Arrays.asList(components));
     }
 
-    protected abstract void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp);
+    protected abstract void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, BaseOpMode opMode, boolean isTeleOp);
 }
