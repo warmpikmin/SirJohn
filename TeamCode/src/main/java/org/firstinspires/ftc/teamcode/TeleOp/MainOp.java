@@ -40,7 +40,6 @@ public class MainOp extends BaseOpMode {
 
     @Override
     public void onStart() throws InterruptedException {
-        robot.camera.isInit = false;
         robot.crossbow.toggleLauncher();
 
         gamepadListener1.start.onRelease = () -> {

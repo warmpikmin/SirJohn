@@ -48,14 +48,7 @@ public class Camera implements Component {
         visionProcessor = new TeamPropDetection(opMode);
         streamSource = new CameraStreamProcessor();
 
-
-        // Create the vision portal the easy way.
-//        VisionPortal.Builder builder = new VisionPortal.Builder();
         android.util.Size cameraResolution = new android.util.Size(1280, 720);
-//        builder.setCameraResolution(cameraResolution);
-//
-//
-//        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, deviceName), aprilTag,visionProcessor);
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, deviceName))
