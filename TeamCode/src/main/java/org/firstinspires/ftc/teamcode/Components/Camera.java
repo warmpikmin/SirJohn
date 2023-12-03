@@ -1,19 +1,17 @@
 package org.firstinspires.ftc.teamcode.Components;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.Base.Component;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -22,17 +20,13 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
+import java.util.concurrent.atomic.AtomicReference;
+import org.opencv.android.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Camera implements Component {
@@ -40,6 +34,7 @@ public class Camera implements Component {
     private final Telemetry telemetry;
     private VisionPortal visionPortal;
     private FirstVisionProcessor visionProcessor;
+    public CameraStreamProcessor streamSource;
     public AprilTagProcessor aprilTag;
     public String deviceName;
     public HardwareMap hardwareMap;
@@ -72,9 +67,6 @@ public class Camera implements Component {
             centerBlurredMat = new Mat(),
             rightBlurredMat = new Mat();
 
-
-
-
     public enum ParkingPosition {
         LEFT,
         CENTER,
@@ -92,6 +84,7 @@ public class Camera implements Component {
         telemetry.update();
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
         visionProcessor = new FirstVisionProcessor();
+        streamSource = new CameraStreamProcessor();
 
 
         // Create the vision portal the easy way.
@@ -104,7 +97,7 @@ public class Camera implements Component {
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, deviceName))
-                .addProcessors(visionProcessor, aprilTag)
+                .addProcessors(visionProcessor, aprilTag, streamSource)
                 .setCameraResolution(cameraResolution)
                 .build();
 
@@ -128,6 +121,7 @@ public class Camera implements Component {
 //        telemetryAprilTag();
         return visionProcessor.getTelemetry();
     }
+
     public void setIsBlue(boolean isBlue){
         this.isBlue = isBlue;
     }
@@ -317,6 +311,36 @@ public class Camera implements Component {
             return input;
         }
 
+    }
+
+    public static class CameraStreamProcessor implements VisionProcessor, CameraStreamSource {
+        private final AtomicReference<Bitmap> lastFrame =
+                new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
+
+        @Override
+        public void init(int width, int height, CameraCalibration calibration) {
+            lastFrame.set(Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565));
+        }
+
+        @Override
+        public Object processFrame(Mat frame, long captureTimeNanos) {
+            Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
+            Utils.matToBitmap(frame, b);
+            lastFrame.set(b);
+            return null;
+        }
+
+        @Override
+        public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight,
+                                float scaleBmpPxToCanvasPx, float scaleCanvasDensity,
+                                Object userContext) {
+            // do nothing
+        }
+
+        @Override
+        public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
+            continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(lastFrame.get()));
+        }
     }
 
 
