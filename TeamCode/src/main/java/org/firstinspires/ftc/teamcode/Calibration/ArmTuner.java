@@ -9,8 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Components.Intake;
 import org.firstinspires.ftc.teamcode.Utils.GamepadListener;
 
-@TeleOp
-
+@TeleOp(group="tuner")
 public class ArmTuner extends LinearOpMode {
     public Intake intake;
     public GamepadListener gamepadListener = new GamepadListener();

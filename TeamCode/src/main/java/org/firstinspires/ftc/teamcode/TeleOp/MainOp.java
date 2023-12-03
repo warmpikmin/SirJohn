@@ -31,11 +31,8 @@ public class MainOp extends BaseOpMode {
 
     @Override
     public void onInit() throws InterruptedException {
-//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-
-
-
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        FtcDashboard.getInstance().startCameraStream(robot.camera.streamSource, 0);
     }
 
     @Override

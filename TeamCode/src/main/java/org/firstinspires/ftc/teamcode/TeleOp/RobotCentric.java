@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp
+@TeleOp(group="A")
 public class RobotCentric extends MainOp {
     @Override
     public void onUpdate() throws InterruptedException {

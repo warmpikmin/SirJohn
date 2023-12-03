@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@TeleOp
+@TeleOp(group="A")
 public class FieldCentric extends MainOp {
     @Override
     public void onUpdate() throws InterruptedException {

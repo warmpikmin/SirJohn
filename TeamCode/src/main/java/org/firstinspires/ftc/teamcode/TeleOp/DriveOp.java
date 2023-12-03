@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Base.BaseOpMode;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Bots.SirJohn;
 
 @TeleOp
+@Disabled
 public class DriveOp extends BaseOpMode {
     public SirJohn robot;
     public double x, y, rot, speed;
