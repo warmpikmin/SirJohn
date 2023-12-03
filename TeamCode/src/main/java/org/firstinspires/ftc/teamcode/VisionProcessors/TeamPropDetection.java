@@ -58,8 +58,9 @@ public class TeamPropDetection implements VisionProcessor {
         RIGHT
     }
 
-    public TeamPropDetection(BaseOpMode opMode) {
+    public TeamPropDetection(BaseOpMode opMode, Telemetry telemetry) {
         this.opMode = opMode;
+        this.telemetry = telemetry;
     }
 
     public void setIsBlue(boolean isBlue) {

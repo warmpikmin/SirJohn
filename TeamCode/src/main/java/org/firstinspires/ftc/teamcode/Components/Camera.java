@@ -45,7 +45,7 @@ public class Camera implements Component {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
-        visionProcessor = new TeamPropDetection(opMode);
+        visionProcessor = new TeamPropDetection(opMode, telemetry);
         streamSource = new CameraStreamProcessor();
 
         android.util.Size cameraResolution = new android.util.Size(1280, 720);
