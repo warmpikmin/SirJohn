@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Bots.SirJohn;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.RRMecanum;
+import org.firstinspires.ftc.teamcode.VisionProcessors.TeamPropDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
@@ -22,9 +23,11 @@ import java.util.List;
 public class TestAuto extends BaseOpMode {
     public SirJohn robot;
     public RRMecanum drive;
+    public TeamPropDetection.ParkingPosition position = TeamPropDetection.ParkingPosition.CENTER;
+    public boolean place1 = false;
 
     public Trajectory tester;
-
+    public Trajectory updateTester;
     @Override
     protected Robot setRobot() {
         this.robot = new SirJohn();
@@ -42,12 +45,13 @@ public class TestAuto extends BaseOpMode {
         drive = new RRMecanum(hardwareMap);
         Pose2d startPose = new Pose2d();
         drive.setPoseEstimate(startPose);
+        robot.camera.setIsBlue(false);
         robot.camera.init();
         robot.outtake.toMiddle();
         robot.intake.toggleArm();
 
         tester = drive.trajectoryBuilder(startPose)
-                .lineTo(new Vector2d(0,-100), RRMecanum.getVelocityConstraint(1, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .lineTo(new Vector2d(10,0), RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         robot.camera.init();
@@ -59,9 +63,12 @@ public class TestAuto extends BaseOpMode {
     }
     @Override
     public void onStart() throws InterruptedException{
+        position = robot.camera.getPosition();
         robot.outtake.toMiddle();
         drive.waitForIdle();
         drive.followTrajectoryAsync(tester);
+        drive.waitForIdle();
+        place1 = true;
 
 
     }
@@ -69,16 +76,50 @@ public class TestAuto extends BaseOpMode {
     public void onUpdate(){
         drive.update();
         robot.camera.update();
+        robot.camera.telemetryAprilTag();
+        telemetry.update();
 
         List<AprilTagDetection> currentDetections = robot.camera.aprilTag.getDetections();
-        for(AprilTagDetection detection : currentDetections){
-            if(detection.metadata != null) {
-                if (detection.ftcPose.y <= 2 || detection.ftcPose.y >= -2) {
-                    drive.breakFollowing();
-                    telemetry.addLine("The detection thing is working");
-                    telemetry.update();
+        if(place1) {
+            for (AprilTagDetection detection : currentDetections) {
+                if (detection.metadata != null) {
+
+                    if (detection.id == 4 && position == TeamPropDetection.ParkingPosition.LEFT) {
+                        drive.setPoseEstimate(new Pose2d());
+                        updateTester = drive.trajectoryBuilder(new Pose2d())
+                                .lineTo(new Vector2d(0,-6), RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .build();
+
+                    }
+                    else if (detection.id == 5 && position == TeamPropDetection.ParkingPosition.CENTER) {
+                        drive.setPoseEstimate(new Pose2d());
+                        updateTester = drive.trajectoryBuilder(new Pose2d())
+                                .lineTo(new Vector2d(-10,0), RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .build();
+
+                    }
+                    else if (detection.id == 6 && position == TeamPropDetection.ParkingPosition.RIGHT) {
+                        drive.setPoseEstimate(new Pose2d());
+                        updateTester = drive.trajectoryBuilder(new Pose2d())
+                                .lineTo(new Vector2d(10,-6), RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .build();
+
+                    }
+                    if(updateTester != null) {
+                        drive.followTrajectoryAsync(updateTester);
+                    }
+                    drive.update();
+                    while(drive.isBusy()){
+                        drive.update();
+                        robot.camera.update();
+                    }
+
                 }
             }
+            place1 = false;
         }
     }
 }

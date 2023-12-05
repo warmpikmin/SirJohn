@@ -66,6 +66,9 @@ public class TeamPropDetection implements VisionProcessor {
     public void setIsBlue(boolean isBlue) {
         this.isBlue = isBlue;
     }
+    public boolean getIsBlue(){
+        return isBlue;
+    }
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {

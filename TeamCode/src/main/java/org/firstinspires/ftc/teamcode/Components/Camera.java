@@ -58,6 +58,7 @@ public class Camera implements Component {
     @Override
     public void update() {}
 
+
     @Override
     public String getTelemetry() {
 //        telemetryAprilTag();
@@ -67,12 +68,15 @@ public class Camera implements Component {
     public void setIsBlue(boolean isBlue){
         visionProcessor.setIsBlue(isBlue);
     }
+    public boolean getIsBlue(){
+        return visionProcessor.getIsBlue();
+    }
 
     public TeamPropDetection.ParkingPosition getPosition() {
         return visionProcessor.getPosition();
     }
 
-    private void telemetryAprilTag() {
+    public void telemetryAprilTag() {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
