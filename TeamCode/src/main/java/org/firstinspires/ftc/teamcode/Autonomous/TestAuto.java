@@ -51,7 +51,7 @@ public class TestAuto extends BaseOpMode {
         robot.intake.toggleArm();
 
         tester = drive.trajectoryBuilder(startPose)
-                .lineTo(new Vector2d(10,0), RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .lineTo(new Vector2d(1,0), RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         robot.camera.init();
@@ -95,7 +95,7 @@ public class TestAuto extends BaseOpMode {
                     else if (detection.id == 5 && position == TeamPropDetection.ParkingPosition.CENTER) {
                         drive.setPoseEstimate(new Pose2d());
                         updateTester = drive.trajectoryBuilder(new Pose2d())
-                                .lineTo(new Vector2d(-10,0), RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .lineTo(new Vector2d(detection.ftcPose.x,0), RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                                 .build();
 
