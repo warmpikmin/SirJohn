@@ -63,7 +63,7 @@ public class TestAuto extends BaseOpMode {
     }
     @Override
     public void onStart() throws InterruptedException{
-        position = robot.camera.getPosition();
+        position = TeamPropDetection.ParkingPosition.CENTER;
         robot.outtake.toMiddle();
         drive.waitForIdle();
         drive.followTrajectoryAsync(tester);
@@ -110,11 +110,6 @@ public class TestAuto extends BaseOpMode {
                     }
                     if(updateTester != null) {
                         drive.followTrajectoryAsync(updateTester);
-                    }
-                    drive.update();
-                    while(drive.isBusy()){
-                        drive.update();
-                        robot.camera.update();
                     }
 
                 }
