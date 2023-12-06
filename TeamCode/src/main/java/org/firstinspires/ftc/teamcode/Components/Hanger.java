@@ -34,7 +34,7 @@ public class Hanger implements Component{
     ){
         rotation = hardwareMap.get(DcMotor.class, rotationName);
 
-        rotation.setDirection(DcMotorSimple.Direction.REVERSE);
+        rotation.setDirection(DcMotorSimple.Direction.FORWARD);
 
         this.PULSES_PER_REVOLUTION = 2786.2;
         this.INIT = (int) (init * PULSES_PER_REVOLUTION);
