@@ -103,6 +103,12 @@ public class Slides implements Component {
 //        }
     }
 
+    public void waitForIdle() {
+        while (!Thread.currentThread().isInterrupted() && isBusy()) {
+            update();
+        }
+    }
+
     public void setPower(double motorPower) {
         leftArm.setPower(motorPower);
         rightArm.setPower(motorPower);
