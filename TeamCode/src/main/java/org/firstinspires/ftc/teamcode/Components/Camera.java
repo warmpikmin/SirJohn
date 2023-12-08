@@ -31,7 +31,16 @@ public class Camera implements Component {
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
-        aprilTag = AprilTagProcessor.easyCreateWithDefaults();
+        aprilTag = new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .setLensIntrinsics(1426.78, 1426.78 , 587.107, 272.84)
+                .build();
+
+
+
         visionProcessor = new TeamPropDetection(opMode, telemetry);
         streamSource = new CameraStreamProcessor();
 
