@@ -74,7 +74,7 @@ public class RedClose extends BaseOpMode {
 
 
         forward = drive.trajectoryBuilder(startPose)
-                .lineTo(new Vector2d(28,-0.7),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .lineTo(new Vector2d(26,-6),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
@@ -85,15 +85,15 @@ public class RedClose extends BaseOpMode {
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         rightInitial = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(28,-31), Math.toRadians(0),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineTo(new Vector2d(24,-26.5), Math.toRadians(0),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         leftMiddle = drive.trajectoryBuilder(new Pose2d())
-                .lineTo(new Vector2d(30,0), RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineTo(new Vector2d(22,7), 0,  RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
         centerMiddle = drive.trajectoryBuilder(new Pose2d())
-                .lineTo(new Vector2d(10,-20), RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineTo(new Vector2d(10,-15), RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         rightMiddle = drive.trajectoryBuilder(new Pose2d())
                 .lineTo(new Vector2d(10,0),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -120,14 +120,14 @@ public class RedClose extends BaseOpMode {
         if(position == TeamPropDetection.ParkingPosition.LEFT) {
             drive.followTrajectoryAsync(forward);
             drive.waitForIdle();
-            drive.turnAsync(Math.toRadians(-100));
+            drive.turnAsync(Math.toRadians(-127));
             drive.waitForIdle();
             robot.intake.toggleClaw();
             drive.setPoseEstimate(new Pose2d());
-            drive.followTrajectory(leftMiddle);
+            drive.followTrajectoryAsync(leftMiddle);
             drive.setPoseEstimate(new Pose2d());
             drive.waitForIdle();
-            sleep(1500);
+            sleep(500);
             place1 = true;
             drive.waitForIdle();
 
@@ -144,10 +144,10 @@ public class RedClose extends BaseOpMode {
             drive.waitForIdle();
             robot.intake.toggleClaw();
             drive.setPoseEstimate(new Pose2d());
-            drive.followTrajectory(centerMiddle);
+            drive.followTrajectoryAsync(centerMiddle);
             drive.setPoseEstimate(new Pose2d());
             drive.waitForIdle();
-            sleep(1500);
+            sleep(500);
             place1 = true;
             drive.waitForIdle();
             drive.waitForIdle();
@@ -157,20 +157,20 @@ public class RedClose extends BaseOpMode {
             drive.waitForIdle();
             drive.followTrajectoryAsync(rightInitial);
             drive.waitForIdle();
-            drive.turnAsync(Math.toRadians(-100));
+            drive.turnAsync(Math.toRadians(-135));
             drive.waitForIdle();
             robot.intake.toggleClaw();
             drive.setPoseEstimate(new Pose2d());
-            drive.followTrajectory(rightMiddle);
+            drive.followTrajectoryAsync(rightMiddle);
             drive.setPoseEstimate(new Pose2d());
             drive.waitForIdle();
-            sleep(1500);
+            sleep(500);
             place1 = true;
             drive.waitForIdle();
 
         }
 
-        robot.intake.setAutoPos();
+//        robot.intake.setAutoPos();
 
 
 
@@ -189,15 +189,15 @@ public class RedClose extends BaseOpMode {
                     if (detection.id == 4 && position == TeamPropDetection.ParkingPosition.LEFT) {
                         drive.setPoseEstimate(new Pose2d());
                         updateTrajectory = drive.trajectoryBuilder(new Pose2d())
-                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-3.8, -detection.ftcPose.x-6.5), 0,  RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-3, -detection.ftcPose.x-6), 0,  RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                                 .addTemporalMarker(1.25,() -> {
                                     robot.slides.move(500,1);
                                     robot.outtake.unFlip();
                                 })
-                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-9, -detection.ftcPose.x-6.5),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-4, -detection.ftcPose.x-7),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-9, -detection.ftcPose.x-30),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-7, -detection.ftcPose.x-23),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                                 .addTemporalMarker(5,() -> {
                                     robot.slides.waitForIdle();
@@ -210,15 +210,15 @@ public class RedClose extends BaseOpMode {
                     else if (detection.id == 5 && position == TeamPropDetection.ParkingPosition.CENTER) {
                         drive.setPoseEstimate(new Pose2d());
                         updateTrajectory = drive.trajectoryBuilder(new Pose2d())
-                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-3.8, -detection.ftcPose.x-6.5),0, RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-3.8, -detection.ftcPose.x-6),0, RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                                 .addTemporalMarker(1.25,() -> {
                                     robot.slides.move(500,1);
                                     robot.outtake.unFlip();
                                 })
-                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-9, -detection.ftcPose.x-6.5),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-4, -detection.ftcPose.x-7),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-9, -detection.ftcPose.x-30),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-7, -detection.ftcPose.x-23),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                                 .addTemporalMarker(5,() -> {
                                     robot.slides.waitForIdle();
@@ -237,9 +237,9 @@ public class RedClose extends BaseOpMode {
                                     robot.slides.move(500,1);
                                     robot.outtake.unFlip();
                                 })
-                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-9, -detection.ftcPose.x-6.5),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-4, -detection.ftcPose.x-7),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-9, -detection.ftcPose.x-30),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-7, -detection.ftcPose.x-23),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                                 .addTemporalMarker(5,() -> {
                                     robot.slides.waitForIdle();

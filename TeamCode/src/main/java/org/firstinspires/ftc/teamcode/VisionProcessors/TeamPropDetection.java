@@ -29,8 +29,8 @@ public class TeamPropDetection implements VisionProcessor {
     public  double leftRedPercent;
     public double rightBluePercent;
     public double rightRedPercent;
-    public Rect leftRect = new Rect(70, 470, 200, 200);
-    public Rect rightRect = new Rect(1020, 470, 200, 200);
+    public Rect leftRect = new Rect(0, 470, 200, 200);
+    public Rect rightRect = new Rect(1080, 470, 200, 200);
     public Rect centerRect = new Rect(540, 420, 200, 200);
 
     public Mat rightBlueMat = new Mat(),
