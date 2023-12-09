@@ -12,6 +12,9 @@ import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Bots.SirJohn;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.RRMecanum;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+import java.util.List;
 
 @Autonomous
 public class BlueClose extends BaseOpMode {
@@ -21,6 +24,8 @@ public class BlueClose extends BaseOpMode {
 
     public Trajectory forward;
     public Trajectory toCenter;
+    public Trajectory updateTrajectory;
+    private boolean place1 = false;
     public Trajectory extraForward;
     public Trajectory leftInitial;
     public Trajectory leftMiddle;
@@ -40,45 +45,43 @@ public class BlueClose extends BaseOpMode {
 
     @Override
     public void onInit(){
-        robot.intake.openClaw();
+        robot.intake.closeClaw();
         drive = new RRMecanum(hardwareMap);
         Pose2d startPose = new Pose2d();
         drive.setPoseEstimate(startPose);
+
         robot.camera.setIsBlue(true);
         robot.outtake.toMiddle();
 
 
         forward = drive.trajectoryBuilder(startPose)
-                .lineTo(new Vector2d(28,-5),RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .lineTo(new Vector2d(27,-14),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
         extraForward = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(28,15), Math.toRadians(0),RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineTo(new Vector2d(28,2), Math.toRadians(0),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineTo(new Vector2d(38,15), Math.toRadians(0),RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineTo(new Vector2d(40,2), Math.toRadians(0),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         leftInitial = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(36,20), Math.toRadians(0),RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineTo(new Vector2d(38,10), Math.toRadians(0),RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         rightMiddle = drive.trajectoryBuilder(new Pose2d())
-                .forward(40, RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(42,-8),Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(25,-8),Math.toRadians(0), RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         centerMiddle = drive.trajectoryBuilder(new Pose2d())
-                .forward(21, RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(25,12),Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(14,21),Math.toRadians(0), RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         leftMiddle = drive.trajectoryBuilder(new Pose2d())
-                .forward(16,RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(21,12),Math.toRadians(0))
+                .splineTo(new Vector2d(2,19),Math.toRadians(0), RRMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
 
         robot.camera.init();
-        robot.intake.setAutoPos();
+
 
 
 
@@ -95,14 +98,16 @@ public class BlueClose extends BaseOpMode {
             drive.waitForIdle();
             drive.followTrajectoryAsync(leftInitial);
             drive.waitForIdle();
-            drive.turnAsync(Math.toRadians(80));
+            drive.turnAsync(Math.toRadians(45));
             drive.waitForIdle();
+            robot.intake.setAutoPos();
             robot.intake.toggleClaw();
             drive.setPoseEstimate(new Pose2d());
             drive.followTrajectory(leftMiddle);
-            robot.slides.move(85,1);
-            sleep(2000);
-            robot.outtake.unFlip();
+            drive.setPoseEstimate(new Pose2d());
+            drive.waitForIdle();
+            sleep(500);
+            place1 = true;
             drive.waitForIdle();
         }
 
@@ -111,28 +116,32 @@ public class BlueClose extends BaseOpMode {
             drive.waitForIdle();
             drive.followTrajectoryAsync(extraForward);
             drive.waitForIdle();
-            drive.turnAsync(Math.toRadians(80));
+            drive.turnAsync(Math.toRadians(73));
             drive.waitForIdle();
+            robot.intake.setAutoPos();
             robot.intake.toggleClaw();
             drive.setPoseEstimate(new Pose2d());
             drive.followTrajectory(centerMiddle);
-            robot.slides.move(85,1);
-            sleep(2000);
-            robot.outtake.unFlip();
+            drive.setPoseEstimate(new Pose2d());
+            drive.waitForIdle();
+            sleep(500);
+            place1 = true;
             drive.waitForIdle();
         }
         if(position == TeamPropDetection.ParkingPosition.RIGHT){
             drive.followTrajectoryAsync(forward);
             drive.waitForIdle();
-            drive.turnAsync(Math.toRadians(80));
+            drive.turnAsync(Math.toRadians(75));
             drive.waitForIdle();
+            robot.intake.setAutoPos();
             robot.intake.toggleClaw();
             drive.setPoseEstimate(new Pose2d());
             drive.followTrajectory(rightMiddle);
+            drive.setPoseEstimate(new Pose2d());
+            drive.waitForIdle();
+            sleep(500);
 //            sleep(1000);
-            robot.slides.move(85,1);
-            sleep(2000);
-            robot.outtake.unFlip();
+            place1 = true;
             drive.waitForIdle();
 
 
@@ -147,6 +156,82 @@ public class BlueClose extends BaseOpMode {
     public void onUpdate(){
         drive.update();
         robot.camera.update();
+        List<AprilTagDetection> currentDetections = robot.camera.aprilTag.getDetections();
+        if(place1) {
+            for (AprilTagDetection detection : currentDetections) {
+                if (detection.metadata != null) {
+
+                    if (detection.id == 1 && position == TeamPropDetection.ParkingPosition.LEFT) {
+                        drive.setPoseEstimate(new Pose2d());
+                        updateTrajectory = drive.trajectoryBuilder(new Pose2d())
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-6, -detection.ftcPose.x-8), 0,  RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .addTemporalMarker(2.8,() -> {
+                                    robot.slides.move(500,1);
+                                    robot.outtake.unFlip();
+                                })
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-6, -detection.ftcPose.x-7),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-7, -detection.ftcPose.x+15),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .addTemporalMarker(5,() -> {
+                                    robot.slides.waitForIdle();
+                                    robot.slides.move(20,1);
+                                    robot.outtake.flip();
+                                })
+                                .build();
+
+                    }
+                    else if (detection.id == 2 && position == TeamPropDetection.ParkingPosition.CENTER) {
+                        drive.setPoseEstimate(new Pose2d());
+                        updateTrajectory = drive.trajectoryBuilder(new Pose2d())
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-6, -detection.ftcPose.x-8),0, RRMecanum.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .addTemporalMarker(1.5,() -> {
+                                    robot.slides.move(500,1);
+                                    robot.outtake.unFlip();
+                                })
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-6, -detection.ftcPose.x-7),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-8, -detection.ftcPose.x+16),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .addTemporalMarker(5,() -> {
+                                    robot.slides.waitForIdle();
+                                    robot.slides.move(20,1);
+                                    robot.outtake.flip();
+                                })
+                                .build();
+
+                    }
+                    else if (detection.id == 3 && position == TeamPropDetection.ParkingPosition.RIGHT) {
+                        drive.setPoseEstimate(new Pose2d());
+                        updateTrajectory = drive.trajectoryBuilder(new Pose2d())
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-5, -detection.ftcPose.x-6.5), 0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .addTemporalMarker(1.25,() -> {
+                                    robot.slides.move(500,1);
+                                    robot.outtake.unFlip();
+                                })
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-5, -detection.ftcPose.x-5),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .splineToConstantHeading(new Vector2d(detection.ftcPose.y-6, -detection.ftcPose.x+23),0, RRMecanum.getVelocityConstraint(5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                        RRMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                                .addTemporalMarker(5,() -> {
+                                    robot.slides.waitForIdle();
+                                    robot.slides.move(20,1);
+                                    robot.outtake.flip();
+                                })
+                                .build();
+
+                    }
+                    if(updateTrajectory != null) {
+                        drive.followTrajectoryAsync(updateTrajectory);
+                    }
+
+                }
+            }
+            place1 = false;
+        }
 
     }
 }
