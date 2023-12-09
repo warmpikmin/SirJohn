@@ -134,6 +134,7 @@ public class TeamPropDetection implements VisionProcessor {
 //            telemetry.addLine("processFrame numero uno is working in a loop");
 
         if (opMode.getGameState() == BaseOpMode.GameState.IN_INIT) {
+            telemetry.clearAll();
 
             Imgproc.blur(input, leftBlurredMat, new Size(5, 5));
             Imgproc.blur(input, centerBlurredMat, new Size(5, 5));
@@ -193,6 +194,7 @@ public class TeamPropDetection implements VisionProcessor {
                 }
             }
 
+            telemetry.addData("ParkingPosition", position);
 
             leftBlueMat.release();
             rightBlueMat.release();
