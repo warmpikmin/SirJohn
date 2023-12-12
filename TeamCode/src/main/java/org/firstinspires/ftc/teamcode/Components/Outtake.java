@@ -17,11 +17,13 @@ public class Outtake implements Component {
     public double spun;
     public double middle;
     public double unSpun;
+    public double spoon;
     Telemetry telemetry;
-    public Outtake(String spinName, HardwareMap hardwareMap, Telemetry telemetry, double spun, double unSpun,double middle){
+    public Outtake(String spinName, HardwareMap hardwareMap, Telemetry telemetry, double spun, double unSpun,double middle, double spoon){
         //pins = hardwareMap.get(Servo.class, pinsName);
         spin = hardwareMap.get(Servo.class, spinName);
         this.telemetry = telemetry;
+        this.spoon = spoon;
         //this.pinsIn = pinsIn;
         //this.pinsMid = pinsMid;
         //this.pinsOut = pinsOut;
@@ -86,6 +88,9 @@ public class Outtake implements Component {
     }
     public void toMiddle(){
         spin.setPosition(middle);
+    }
+    public void toSpoon(){
+        spin.setPosition(spoon);
     }
     public void updatePosFlip(){
         spin.setPosition(spinPos ? spun : unSpun);

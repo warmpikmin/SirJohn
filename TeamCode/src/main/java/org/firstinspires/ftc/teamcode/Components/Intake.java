@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 @Config
 public class Intake implements Component {
-    private Servo claw;
+    public Servo claw;
     public DcMotor arm;
 
     Telemetry telemetry;
