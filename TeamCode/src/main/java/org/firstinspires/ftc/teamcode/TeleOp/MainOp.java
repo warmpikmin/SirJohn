@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -33,6 +34,7 @@ public class MainOp extends BaseOpMode {
     public void onInit() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         FtcDashboard.getInstance().startCameraStream(robot.camera.streamSource, 0);
+        robot.leds.changePattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_LAVA_PALETTE);
     }
 
     @Override
@@ -66,8 +68,18 @@ public class MainOp extends BaseOpMode {
 
 
         };
-
-
+        gamepadListener1.x.onRelease = () -> {
+          robot.leds.setPatternBlue();
+        };
+        gamepadListener1.back.onRelease = () -> {
+            robot.leds.iLoveSimonApley();
+        };
+        gamepadListener1.y.onRelease = () -> {
+            robot.leds.setPatternGay();
+        };
+        gamepadListener1.start.onRelease = () -> {
+            robot.leds.iLoveGabiNatenshon();
+        };
         gamepadListener2.x.onRelease = () -> {
             robot.outtake.toggleFlip();
         };

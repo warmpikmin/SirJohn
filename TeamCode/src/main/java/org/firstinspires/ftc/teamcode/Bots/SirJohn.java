@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Components.Camera;
 import org.firstinspires.ftc.teamcode.Components.Crossbow;
 import org.firstinspires.ftc.teamcode.Components.Hanger;
 import org.firstinspires.ftc.teamcode.Components.Intake;
+import org.firstinspires.ftc.teamcode.Components.LEDs;
 import org.firstinspires.ftc.teamcode.Components.Mecanum;
 import org.firstinspires.ftc.teamcode.Components.Outtake;
 import org.firstinspires.ftc.teamcode.Components.Slides;
@@ -29,6 +30,8 @@ public class SirJohn extends Robot {
     public Slides slides;
     public IMU imu;
 
+    public LEDs leds;
+
     @Override
     protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, BaseOpMode opMode, boolean isTeleOp) {
         this.isTeleOp = isTeleOp;
@@ -37,6 +40,7 @@ public class SirJohn extends Robot {
         this.hanger = new Hanger("hanger", hardwareMap, telemetry, isTeleOp, 0,0,0);
         this.crossbow = new Crossbow("crossbow", hardwareMap, telemetry, 0.7, 1);
         this.slides = new Slides("rightArm","leftArm" , hardwareMap, telemetry, isTeleOp, 0, 2240, 0,90,800, 0.2);
+        this.leds = new LEDs("Pb",hardwareMap,telemetry);
         if(isTeleOp) {
             this.mecanum = new Mecanum(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight", telemetry);
             this.mecanum.fl.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -51,6 +55,6 @@ public class SirJohn extends Robot {
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
 
-        addComponents(camera, intake, outtake, crossbow, slides, hanger);
+        addComponents(camera, intake, outtake, crossbow, slides, hanger,leds);
     }
 }

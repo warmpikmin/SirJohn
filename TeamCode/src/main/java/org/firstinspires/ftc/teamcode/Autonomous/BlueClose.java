@@ -49,7 +49,6 @@ public class BlueClose extends BaseOpMode {
         drive = new RRMecanum(hardwareMap);
         Pose2d startPose = new Pose2d();
         drive.setPoseEstimate(startPose);
-
         robot.camera.setIsBlue(true);
         robot.outtake.toMiddle();
 
